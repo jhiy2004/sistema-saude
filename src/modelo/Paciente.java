@@ -1,22 +1,24 @@
+package modelo;
+
 public class Paciente{
 	private String nome;
 	private int idade;
-	private bool sexo;
+	private boolean sexo;
 	private String profissao;
 	private String endereco;
 	private String telefone;
 	private double peso;
 	private double altura;
 	private String tipoSanguineo;
-	private bool usoMedicamentos;
-	private bool usoCigarroAlcool;
-	private bool praticaExercicios;
+	private boolean usoMedicamentos;
+	private boolean usoCigarroAlcool;
+	private boolean praticaExercicios;
 
 	private HistoricoMedico historicoMedico;
 
-	public Paciente(String nome, int idade, bool sexo, String profissao, String endereco, String telefone,
-					double peso, double altura, String tipoSanguineo, bool usoMedicamentos, bool usoCigarroAlcool,
-					bool praticaExercicios){
+	public Paciente(String nome, int idade, boolean sexo, String profissao, String endereco, String telefone,
+					double peso, double altura, String tipoSanguineo, boolean usoMedicamentos, boolean usoCigarroAlcool,
+					boolean praticaExercicios){
 		this.nome = nome;
 		this.idade = idade;
 		this.sexo = sexo;
@@ -39,7 +41,7 @@ public class Paciente{
 		return this.idade;
 	}
 
-	public bool getSexo(){
+	public boolean getSexo(){
 		return this.sexo;
 	}
 
@@ -67,15 +69,15 @@ public class Paciente{
 		return this.tipoSanguineo;
 	}
 
-	public bool getUsoMedicamentos(){
+	public boolean getUsoMedicamentos(){
 		return this.usoMedicamentos;
 	}
 
-	public bool getUsoCigarroAlcool(){
+	public boolean getUsoCigarroAlcool(){
 		return this.usoCigarroAlcool;
 	}
 
-	public bool getPraticaExercicios(){
+	public boolean getPraticaExercicios(){
 		return this.praticaExercicios;
 	}
 
@@ -87,7 +89,7 @@ public class Paciente{
 		this.idade = idade;
 	}
 
-	public void setSexo(bool sexo){
+	public void setSexo(boolean sexo){
 		this.sexo = sexo;
 	}
 
@@ -115,15 +117,15 @@ public class Paciente{
 		this.tipoSanguineo = tipoSanguineo;
 	}
 
-	public void setUsoMedicamentos(bool usoMedicamentos){
+	public void setUsoMedicamentos(boolean usoMedicamentos){
 		this.usoMedicamentos = usoMedicamentos;
 	}
 
-	public void setUsoCigarroAlcool(bool usoCigarroAlcool){
+	public void setUsoCigarroAlcool(boolean usoCigarroAlcool){
 		this.usoCigarroAlcool = usoCigarroAlcool;
 	}
 
-	public void setPraticaExercicios(bool praticaExercicios){
+	public void setPraticaExercicios(boolean praticaExercicios){
 		this.praticaExercicios = praticaExercicios;
 	}
 
