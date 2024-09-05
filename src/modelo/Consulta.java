@@ -8,6 +8,7 @@ public class Consulta {
     private String especialidade;
     private Medico medico;
     private LocalDate data;
+    private ReceitaMedica receitaMedica;
     private LocalTime horario;
     private Paciente paciente;
     
@@ -19,7 +20,17 @@ public class Consulta {
 	this.horario = horario;
 	this.paciente = paciente;
     }
+    
+    public String criarReceitaMedica(String receitaId, String medicamento, String observacoes) {
+        this.receitaMedica = new ReceitaMedica(receitaId, this, medicamento, observacoes);
+        return receitaMedica.toStringReceitaMedica();
+    }
 
+    // Método para obter a receita médica associada
+    public ReceitaMedica getReceitaMedica() {
+        return receitaMedica;
+    }
+    
     public Hospital getHospital() {
 	return hospital;
     }
