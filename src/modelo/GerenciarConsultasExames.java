@@ -39,9 +39,9 @@ public class GerenciarConsultasExames {
 	// Ate aqui
 	
 	// Seleciona os dados da consulta e passa para o medico adicionar
+        m.adicionarConsulta(c);
 	Consulta c = new Consulta(this.hospital, especialidade, m, data, horario, p);
 	consultas.add(c);
-	m.adicionarConsulta(c);
     }
     
     public void cancelarConsulta(Consulta c){
@@ -50,7 +50,7 @@ public class GerenciarConsultasExames {
 	consultas.remove(c);
     }
     
-    public void agendarExame(){ // Ainda preciso da classe de Exame
+    public void agendarExame(){
 	
     }
 }
