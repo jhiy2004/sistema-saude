@@ -1,5 +1,6 @@
 package modelo;
 
+import constantes.Constantes.Status;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -10,6 +11,7 @@ public class Consulta {
     private LocalDate data;
     private LocalTime horario;
     private Paciente paciente;
+    private Status status;
     
     public Consulta(Hospital hospital, String especialidade, Medico medico, LocalDate data, LocalTime horario, Paciente paciente){
 	this.hospital = hospital;
@@ -66,6 +68,14 @@ public class Consulta {
 
     public void setPaciente(Paciente paciente) {
 	this.paciente = paciente;
+    }
+    
+    public Status getStatus() {
+        return this.status;
+    }
+    
+    public void setStatus(Status status) {
+        this.status = status;
     }
     
     @Override

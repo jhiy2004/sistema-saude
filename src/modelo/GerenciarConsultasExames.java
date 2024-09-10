@@ -31,16 +31,9 @@ public class GerenciarConsultasExames {
 	this.exames = exames;
     }
     
-    public void agendarConsulta(String especialidade, Paciente p){
-	// Mudar isso para perguntar ao paciente (DECIDIR COM O GRUPO COMO FAZER)
-	Medico m = new Medico();
-	LocalDate data = LocalDate.of(1999, 10, 24);
-	LocalTime horario = LocalTime.of(12, 0, 0, 0);
-	// Ate aqui
-	
-	// Seleciona os dados da consulta e passa para o medico adicionar
-        m.adicionarConsulta(c);
+    public void agendarConsulta(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
 	Consulta c = new Consulta(this.hospital, especialidade, m, data, horario, p);
+        m.adicionarConsulta(c);
 	consultas.add(c);
     }
     
@@ -50,7 +43,15 @@ public class GerenciarConsultasExames {
 	consultas.remove(c);
     }
     
-    public void agendarExame(){
-	
+    public void agendarExame(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
+        Exame e = new Exame(this.hospital, especialidade, m, data, data, horario, p);
+        m.adicionarExame(e);
+        exames.add(e);
+    }
+    
+    public void cancelarExame(Exame e){
+        Medico m = e.getMedico();
+        m.cancelarExame(e);
+        exames.remove(e);
     }
 }
