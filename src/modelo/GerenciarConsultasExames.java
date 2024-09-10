@@ -31,26 +31,37 @@ public class GerenciarConsultasExames {
 	this.exames = exames;
     }
     
-    public void agendarConsulta(String especialidade, Paciente p){
-	// Mudar isso para perguntar ao paciente (DECIDIR COM O GRUPO COMO FAZER)
-	Medico m = new Medico();
-	LocalDate data = LocalDate.of(1999, 10, 24);
-	LocalTime horario = LocalTime.of(12, 0, 0, 0);
-	// Ate aqui
-	
-	// Seleciona os dados da consulta e passa para o medico adicionar
+    public Consulta agendarConsulta(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
 	Consulta c = new Consulta(this.hospital, especialidade, m, data, horario, p);
+        Consulta retorno = m.adicionarConsulta(c);
 	consultas.add(c);
-	m.adicionarConsulta(c);
+        return retorno;
     }
     
-    public void cancelarConsulta(Consulta c){
+    public boolean cancelarConsulta(Consulta c){
 	Medico m = c.getMedico();
-	m.cancelarConsulta(c);
-	consultas.remove(c);
+	boolean retorno = m.cancelarConsulta(c);
+        if(retorno){
+            // Se removeu na agenda, remove aqui
+            consultas.remove(c);
+        }
+        return retorno;
     }
     
-    public void agendarExame(){ // Ainda preciso da classe de Exame
-	
+    public Exame agendarExame(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
+        Exame e = new Exame(this.hospital, especialidade, m, data, data, horario, p);
+        Exame retorno = m.adicionarExame(e);
+        exames.add(e);
+        return retorno;
+    }
+    
+    public boolean cancelarExame(Exame e){
+        Medico m = e.getMedico();
+        boolean retorno = m.cancelarExame(e);
+        if(retorno){
+            // Se removeu na agenda, remove aqui
+            exames.remove(e);
+        }
+        return retorno;
     }
 }
