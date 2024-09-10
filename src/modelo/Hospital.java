@@ -5,6 +5,8 @@
 package modelo;
 
 import controlador.GerenciarConsultasExames;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Hospital {
@@ -15,7 +17,7 @@ public class Hospital {
     // C. um Diretor para poder acessar o sistema (talvez). diretor herda medico;
     private GerenciarConsultasExames gce;
     private int limiteEmergencia;
-    private int contP;
+    private int contPacientesEmergencia;
 
     public Hospital(String nome, int limiteEmergencia){
         this.nome = nome;
@@ -23,19 +25,19 @@ public class Hospital {
         this.departamentos = new ArrayList<>();
         this.emergencia = new Paciente[limiteEmergencia];
         this.gce = new GerenciarConsultasExames(this);
-        this.contP = 0;
+        this.contPacientesEmergencia = 0;
     }
 
-    public Consulta addConsulta(String especialidade, Paciente p){
-        return gce.agendarConsulta(especialidade, p);
+    public Consulta addConsulta(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
+        return gce.agendarConsulta(especialidade, p, m, data, horario);
     }
 
     public boolean cancelarConsulta(Consulta c){
         return gce.cancelarConsulta(c);
     }
     
-    public Exame addExame(String especialidade, Paciente p){
-	return gce.agendarExame(especialidade, p);
+    public Exame addExame(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
+	return gce.agendarExame(especialidade, p, m, data, horario);
     }
     
     public boolean cancelarExame(Exame e){
@@ -49,8 +51,8 @@ public class Hospital {
         return this.departamentos.size();
     }
 
-    public int getContP() {
-        return this.contP;
+    public int getContPacientesEmergencia() {
+        return this.contPacientesEmergencia;
     }
 
     public void setNomeHospital(String nome) {
@@ -87,9 +89,9 @@ public class Hospital {
     }
 
     public boolean internar(Paciente p){
-        if(this.contP < this.limiteEmergencia){
-            this.emergencia[this.contP] = p;
-            this.contP++;
+        if(this.contPacientesEmergencia < this.limiteEmergencia){
+            this.emergencia[this.contPacientesEmergencia] = p;
+            this.contPacientesEmergencia++;
             return true;
         }
         return false;

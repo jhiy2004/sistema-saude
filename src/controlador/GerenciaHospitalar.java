@@ -4,10 +4,13 @@
  */
 package controlador;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import modelo.Consulta;
 import modelo.Exame;
 import modelo.Hospital;
+import modelo.Medico;
 import modelo.Paciente;
 
 /**
@@ -41,16 +44,16 @@ public class GerenciaHospitalar {
     }
 
 
-    public Consulta addConsulta(Paciente p, int numeroHospitalSelec, String especialidade){ 
+    public Consulta addConsulta(Paciente p, int numeroHospitalSelec, String especialidade, Medico m, LocalDate data, LocalTime horario){ 
         for(Paciente cadastrado : this.cadastrados){
             if(cadastrado == p){
-                Consulta c = hospitais.get(numeroHospitalSelec).addConsulta(especialidade, p);
+                Consulta c = hospitais.get(numeroHospitalSelec).addConsulta(especialidade, p, m, data, horario);
 		return c;
             }
         }
 	// não está cadastrado
         cadastrados.add(p);
-        Consulta c = hospitais.get(numeroHospitalSelec).addConsulta(especialidade, p);
+        Consulta c = hospitais.get(numeroHospitalSelec).addConsulta(especialidade, p, m, data, horario);
 	return c;
     }
 
@@ -58,16 +61,16 @@ public class GerenciaHospitalar {
         return c.getHospital().cancelarConsulta(c);
     }
     
-    public Exame addExame(Paciente p, int numeroHospitalSelec, String especialidade){
+    public Exame addExame(Paciente p, int numeroHospitalSelec, String especialidade, Medico m, LocalDate data, LocalTime horario){
 	for(Paciente cadastrado : this.cadastrados){
 	    if(cadastrado == p){
-		Exame e = hospitais.get(numeroHospitalSelec).addExame(especialidade, p);
+		Exame e = hospitais.get(numeroHospitalSelec).addExame(especialidade, p, m, data, horario);
 		return e;
 	    }
 	}
 	// não está cadastrado
 	cadastrados.add(p);
-	Exame e = hospitais.get(numeroHospitalSelec).addExame(especialidade, p);
+	Exame e = hospitais.get(numeroHospitalSelec).addExame(especialidade, p, m, data, horario);
 	return e;
     }
     
