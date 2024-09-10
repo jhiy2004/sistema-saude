@@ -31,27 +31,37 @@ public class GerenciarConsultasExames {
 	this.exames = exames;
     }
     
-    public void agendarConsulta(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
+    public Consulta agendarConsulta(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
 	Consulta c = new Consulta(this.hospital, especialidade, m, data, horario, p);
-        m.adicionarConsulta(c);
+        Consulta retorno = m.adicionarConsulta(c);
 	consultas.add(c);
+        return retorno;
     }
     
-    public void cancelarConsulta(Consulta c){
+    public boolean cancelarConsulta(Consulta c){
 	Medico m = c.getMedico();
-	m.cancelarConsulta(c);
-	consultas.remove(c);
+	boolean retorno = m.cancelarConsulta(c);
+        if(retorno){
+            // Se removeu na agenda, remove aqui
+            consultas.remove(c);
+        }
+        return retorno;
     }
     
-    public void agendarExame(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
+    public Exame agendarExame(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
         Exame e = new Exame(this.hospital, especialidade, m, data, data, horario, p);
-        m.adicionarExame(e);
+        Exame retorno = m.adicionarExame(e);
         exames.add(e);
+        return retorno;
     }
     
-    public void cancelarExame(Exame e){
+    public boolean cancelarExame(Exame e){
         Medico m = e.getMedico();
-        m.cancelarExame(e);
-        exames.remove(e);
+        boolean retorno = m.cancelarExame(e);
+        if(retorno){
+            // Se removeu na agenda, remove aqui
+            exames.remove(e);
+        }
+        return retorno;
     }
 }
