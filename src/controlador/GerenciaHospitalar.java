@@ -5,6 +5,10 @@
 package controlador;
 
 import java.util.ArrayList;
+import modelo.Consulta;
+import modelo.Exame;
+import modelo.Hospital;
+import modelo.Paciente;
 
 /**
  *
@@ -20,11 +24,11 @@ public class GerenciaHospitalar {
         this.hospitais = new ArrayList<>();
     }
 
-    public addHospital(Hospital h){
+    public void addHospital(Hospital h){
         this.hospitais.add(h);
     }
 
-    public addPaciente(Paciente p){
+    public void addPaciente(Paciente p){
         this.cadastrados.add(p);
     }
 
@@ -37,52 +41,37 @@ public class GerenciaHospitalar {
     }
 
 
-    public void addConsulta(Paciente p, int numeroHospitalSelec){ 
+    public Consulta addConsulta(Paciente p, int numeroHospitalSelec, String especialidade){ 
         for(Paciente cadastrado : this.cadastrados){
             if(cadastrado == p){
-                hospitais.get(numeroHospitalSelec).addConsulta(p);
-
+                Consulta c = hospitais.get(numeroHospitalSelec).addConsulta(especialidade, p);
+		return c;
             }
-        }// não está cadastrado
-        cadastrados.add(p);
-        //pronto
-        hospitais.get(numeroHospitalSelec).addConsulta(p);
-    }
-    public void addConsulta(Paciente p, int numeroHospitalSelec, String codEspecialidade){ 
-        for(Paciente cadastrado : this.cadastrados){
-            if(cadastrado == p){
-                hospitais.get(numeroHospitalSelec).addConsulta(p,codEspecialidade);
-            }
-        }// não está cadastrado
-        cadastrados.add(p);
-        //pronto
-        hospitais.get(numeroHospitalSelec).addConsulta(p,codEspecialidade);
-    }    
-
-    public void cancelarConsulta(Consulta c){
-        c.getHospital().cancelarConsulta(c);
-    }
-
-    public String exibirHospitais(){
-        String mensagem="";
-        int i = 1;
-        for(Hospital h : this.hospitais){
-            mensagem=i+"-"+h.getNomeHospital()+"\n"; // Exibindo os nomes dos hospitais com seus numeros para a seleção
-            i++;
-        } 
-        return mensagem;
-    }
-    public String exibirHospitais(String codEspecialidade){
-        String mensagem="";
-        for(Hospital h : this.hospitais){
-            ArrayList<Departamento> deptos = h.getDepartamentos();
-            for(Departamento depto : deptos){
-                if(depto.getCod().equals(codEspecialidade)){
-                    mensagem=i+"-"+hospitais[i].getNomeHospital()+"\n"; // Exibindo os nomes dos hospitais com seus numeros para a seleção
-                    break;
-                }
-            }                                     //filtrando de acordo com as especialidades
         }
-        return mensagem;
+	// não está cadastrado
+        cadastrados.add(p);
+        Consulta c = hospitais.get(numeroHospitalSelec).addConsulta(especialidade, p);
+	return c;
+    }
+
+    public boolean cancelarConsulta(Consulta c){
+        return c.getHospital().cancelarConsulta(c);
+    }
+    
+    public Exame addExame(Paciente p, int numeroHospitalSelec, String especialidade){
+	for(Paciente cadastrado : this.cadastrados){
+	    if(cadastrado == p){
+		Exame e = hospitais.get(numeroHospitalSelec).addExame(especialidade, p);
+		return e;
+	    }
+	}
+	// não está cadastrado
+	cadastrados.add(p);
+	Exame e = hospitais.get(numeroHospitalSelec).addExame(especialidade, p);
+	return e;
+    }
+    
+    public boolean cancelarExame(Exame e){
+	return e.getHospital().cancelarExame(e);
     }
 }

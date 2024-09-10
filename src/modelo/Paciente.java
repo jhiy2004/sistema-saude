@@ -1,6 +1,7 @@
 package modelo;
 
 import controlador.GerenciaHospitalar;
+import java.util.ArrayList;
 
 public class Paciente{
 	private String nome;
@@ -44,14 +45,22 @@ public class Paciente{
 		this.gh = new GerenciaHospitalar();
 	}
 
-	public void agendarConsulta(int numeroHospitalSelec){
-		Consulta c = gh.addConsulta(this, numeroHospitalSelec);
+	public void agendarConsulta(int numeroHospitalSelec, String especialidade){
+		Consulta c = gh.addConsulta(this, numeroHospitalSelec, especialidade);
 		this.consultas.add(c);
 	}
 
-	public void agendarExame(int numeroHospitalSelec){
-		Exame e = gh.addExame(this, numeroHospitalSelec);
+	public void agendarExame(int numeroHospitalSelec, String especialidade){
+		Exame e = gh.addExame(this, numeroHospitalSelec, especialidade);
 		this.exames.add(e);
+	}
+	
+	public boolean cancelarConsulta(){
+	    return true;
+	}
+	
+	public boolean cancelarExame(){
+	    return true;
 	}
 
 	public String getNome(){
@@ -102,11 +111,11 @@ public class Paciente{
 		return this.praticaExercicios;
 	}
 
-	public void getConsultas(){
+	public ArrayList<Consulta> getConsultas(){
 		return this.consultas;
 	}
 
-	public void getExames(){
+	public ArrayList<Exame> getExames(){
 		return this.exames;
 	}
 

@@ -4,6 +4,8 @@
  */
 package modelo;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author danie
@@ -22,11 +24,6 @@ public class Departamento {
 
     public Departamento(){
         this.medicos = new ArrayList<>();
-    }
-
-    public void addConsulta(Paciente p, GerenciadorConsultasExames gce){
-        gce.addConsulta(p);
-
     }
 
     public Medico buscarMedCrm(String Crm){
@@ -56,23 +53,9 @@ public class Departamento {
         return this.medicos.size();
     }
 
-    public String exibir(){
-        String mensagem="";
-        mensagem=mensagem +"Departamento\n";
-        mensagem=mensagem+ "Nome:"+nome+"\n";
-        mensagem=mensagem+ "Codigo:"+cod+"\n";
-        for(int i=0; i < this.medicos.size(); i++){
-            mensagem=mensagem +String.valueOf(i)+"-";
-            mensagem=mensagem+ medicos.get(i).exibir();
-            mensagem=mensagem+"\n:";
-        }
-
-        return mensagem;
-    }
-
     public Medico buscarMedicoN(String nome){
         for(Medico m : this.medicos){
-            if(m.getNomeMedico().equals(nome)){
+            if(m.getNome().equals(nome)){
                 return m;
             }
         }//System.out.println("Nao encontrado");

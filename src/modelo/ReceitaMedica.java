@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package modelo;
-import java.time.LocalDate;
 /**
  *
  * @author renna
@@ -11,9 +10,9 @@ import java.time.LocalDate;
 public class ReceitaMedica {
     private String receitaId;
     private Consulta consulta; 
-    //private Paciente paciente;            //já estão armazenados em consulta
+    //private Paciente paciente;            // Já estão armazenados em consulta
     //private Medico medicoResponsavel;
-    private String prescricao;          //futuramente separar em medicamentos e dosagens;
+    private String prescricao;          // Futuramente separar em medicamentos e dosagens;
     //private String medicamento;
     private String observacoes;
     //private Exame exameSolicitado;  
@@ -25,9 +24,9 @@ public class ReceitaMedica {
         this.observacoes = observacoes;
     }
 
-    public String toStringReceitaMedica(){      //FUnção que Emula impressão da receita
+    public String toStringReceitaMedica(){      // Função que Emula impressão da receita
         return "Receita Médica "+getReceitaId()+"Informações do Emitente:\n"+"Hospital"+getConsulta().getHospital().getNomeHospital()+
-                "\nNome: "+getConsulta().getMedico().getNomeMedico()+"\nCRM: "+getConsulta().getMedico().getCrm()+
+                "\nNome: "+getConsulta().getMedico().getNome()+"\nCRM: "+getConsulta().getMedico().getCrm()+
                 "\nIdentificação do Paciente: "+"\nNome: "+getConsulta().getPaciente().getNome()+
                 "\nIdade: "+getConsulta().getPaciente().getIdade()+"\nTelefone: "+getConsulta().getPaciente().getTelefone()+
                 "\nPrescrição: "+getPrescricao()+"Observações: "+getObservacoes()+"\nData de Emissão: "+getConsulta().getData();        

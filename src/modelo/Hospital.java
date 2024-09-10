@@ -4,6 +4,9 @@
  */
 package modelo;
 
+import controlador.GerenciarConsultasExames;
+import java.util.ArrayList;
+
 public class Hospital {
     private String nome;
     private ArrayList<Departamento> departamentos;// C. metodo que mostre os  de medicos de todos os departamentos I.TOtal.
@@ -19,27 +22,24 @@ public class Hospital {
         this.limiteEmergencia = limiteEmergencia;
         this.departamentos = new ArrayList<>();
         this.emergencia = new Paciente[limiteEmergencia];
-        this.gce = new GerenciarConsultasExames();
+        this.gce = new GerenciarConsultasExames(this);
         this.contP = 0;
     }
 
-    public void addConsulta(String especialidade, Paciente p){
-        this.gce.agendarConsulta(p);
+    public Consulta addConsulta(String especialidade, Paciente p){
+        return gce.agendarConsulta(especialidade, p);
     }
 
-    public void addConsulta(Paciente p,String codEspecialidade){
-        for(Departamento d : departamentos){
-            if(d.getCod().equals(codEspecialidade)){
-                d.addConsulta(p,gce);
-            }
-        }
-        System.out.println("Hospital selecionado não possui nehum medico com essa especialidade");
-        //Dificil de acontecer já que possui um filtro para hospitais que possuem a especialidade
+    public boolean cancelarConsulta(Consulta c){
+        return gce.cancelarConsulta(c);
     }
-
-
-    public void cancelarConsulta(Consulta c){
-        gce.cancelarConsulta(c);
+    
+    public Exame addExame(String especialidade, Paciente p){
+	return gce.agendarExame(especialidade, p);
+    }
+    
+    public boolean cancelarExame(Exame e){
+	return gce.cancelarExame(e);
     }
 
     public ArrayList<Departamento> getDepartamentos() {
@@ -72,26 +72,18 @@ public class Hospital {
 
     public void addMed(Medico m){
         for(Departamento d : this.departamentos){
-            if(d.getCod().equals(m.getEspecialidade().getCod())){
+            if(d.getCod().equals(m.getEspecialidadeMedica())){
                 d.addMed(m);
                 return;
             }
 
             Departamento novo = new Departamento();
-            novo.setNome("Departamento de "+m.getEspecialidade().getNome());
-            novo.setCod(m.getEspecialidade().getCod());
+            novo.setNome("Departamento de "+m.getEspecialidadeMedica());
+            novo.setCod(m.getEspecialidadeMedica());
             novo.addMed(m);
 
             this.departamentos.add(novo);
         }    
-
-    }
-    public String exibirDepartamentos(){
-        String mensagem="";
-        for(Departamento d : this.departamentos){
-            mensagem = d.exibir();
-        }
-        return mensagem;  
     }
 
     public boolean internar(Paciente p){
@@ -102,5 +94,4 @@ public class Hospital {
         }
         return false;
     }
-
 }
