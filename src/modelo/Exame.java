@@ -1,5 +1,6 @@
 package modelo;
 
+import constantes.Constantes.Status;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -11,12 +12,7 @@ public class Exame {
     private LocalTime horario; 
     private Paciente paciente;  
     private String resultado;   
-    private StatusExame status; 
-
-
-    public enum StatusExame {
-        AGENDADO, REALIZADO, PENDENTE, CANCELADO
-    }
+    private Status status; 
 
     // ========== Construtor ==========
     public Exame(Hospital hospital, String tipoExame, Medico medico, LocalDate data, LocalTime horario, Paciente paciente) {
@@ -26,7 +22,6 @@ public class Exame {
         this.data = data;
         this.horario = horario;
         this.paciente = paciente;
-        this.status = StatusExame.AGENDADO;
         this.resultado = null; 
     }
 
@@ -87,11 +82,11 @@ public class Exame {
         this.resultado = resultado;
     }
 
-    public StatusExame getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(StatusExame status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
