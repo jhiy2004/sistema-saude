@@ -1,5 +1,7 @@
 package modelo;
 
+import controlador.GerenciaHospitalar;
+
 public class Paciente{
 	private String nome;
 	private int idade;
@@ -14,6 +16,10 @@ public class Paciente{
 	private boolean usoCigarroAlcool;
 	private boolean praticaExercicios;
 
+	private ArrayList<Consulta> consultas;
+	private ArrayList<Exame> exames;
+
+	private GerenciaHospitalar gh;
 	private HistoricoMedico historicoMedico;
 
 	public Paciente(String nome, int idade, boolean sexo, String profissao, String endereco, String telefone,
@@ -31,6 +37,21 @@ public class Paciente{
 		this.usoMedicamentos = usoMedicamentos;
 		this.usoCigarroAlcool = usoCigarroAlcool;
 		this.praticaExercicios = praticaExercicios;
+
+		this.consultas = new ArrayList<>();
+		this.exames = new ArrayList<>();
+
+		this.gh = new GerenciaHospitalar();
+	}
+
+	public void agendarConsulta(int numeroHospitalSelec){
+		Consulta c = gh.addConsulta(this, numeroHospitalSelec);
+		this.consultas.add(c);
+	}
+
+	public void agendarExame(int numeroHospitalSelec){
+		Exame e = gh.addExame(this, numeroHospitalSelec);
+		this.exames.add(e);
 	}
 
 	public String getNome(){
@@ -79,6 +100,14 @@ public class Paciente{
 
 	public boolean getPraticaExercicios(){
 		return this.praticaExercicios;
+	}
+
+	public void getConsultas(){
+		return this.consultas;
+	}
+
+	public void getExames(){
+		return this.exames;
 	}
 
 	public void setNome(String nome){
