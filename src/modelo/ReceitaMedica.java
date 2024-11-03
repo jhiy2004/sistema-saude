@@ -9,13 +9,9 @@ package modelo;
  */
 public class ReceitaMedica {
     private String receitaId;
-    private Consulta consulta; 
-    //private Paciente paciente;            // Já estão armazenados em consulta
-    //private Medico medicoResponsavel;
+    private Consulta consulta;
     private String prescricao;          // Futuramente separar em medicamentos e dosagens;
-    //private String medicamento;
     private String observacoes;
-    //private Exame exameSolicitado;  
     
     public ReceitaMedica(String receitaId, Consulta consulta, String prescricao, String observacoes) {
         this.receitaId = receitaId;
@@ -24,8 +20,8 @@ public class ReceitaMedica {
         this.observacoes = observacoes;
     }
 
-    public String toStringReceitaMedica(){      // Função que Emula impressão da receita
-        return "Receita Médica "+getReceitaId()+"Informações do Emitente:\n"+"Hospital"+getConsulta().getHospital().getNomeHospital()+
+    public String toString(){      // Função que Emula impressão da receita
+        return "Receita Médica "+getReceitaId()+"Informações do Emitente:\n"+
                 "\nNome: "+getConsulta().getMedico().getNome()+"\nCRM: "+getConsulta().getMedico().getCrm()+
                 "\nIdentificação do Paciente: "+"\nNome: "+getConsulta().getPaciente().getNome()+
                 "\nIdade: "+getConsulta().getPaciente().getIdade()+"\nTelefone: "+getConsulta().getPaciente().getTelefone()+

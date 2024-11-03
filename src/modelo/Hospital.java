@@ -1,12 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
 
-import controlador.GerenciarConsultasExames;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Hospital {
@@ -15,7 +8,6 @@ public class Hospital {
     // conferir as especialidades;
     private Paciente emergencia[]; // pacientes na emergencia, verificar se há vagas nela
     // C. um Diretor para poder acessar o sistema (talvez). diretor herda medico;
-    private GerenciarConsultasExames gce;
     private int limiteEmergencia;
     private int contPacientesEmergencia;
 
@@ -24,24 +16,7 @@ public class Hospital {
         this.limiteEmergencia = limiteEmergencia;
         this.departamentos = new ArrayList<>();
         this.emergencia = new Paciente[limiteEmergencia];
-        this.gce = new GerenciarConsultasExames(this);
         this.contPacientesEmergencia = 0;
-    }
-
-    public Consulta addConsulta(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
-        return gce.agendarConsulta(especialidade, p, m, data, horario);
-    }
-
-    public boolean cancelarConsulta(Consulta c){
-        return gce.cancelarConsulta(c);
-    }
-    
-    public Exame addExame(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
-	return gce.agendarExame(especialidade, p, m, data, horario);
-    }
-    
-    public boolean cancelarExame(Exame e){
-	return gce.cancelarExame(e);
     }
 
     public ArrayList<Departamento> getDepartamentos() {

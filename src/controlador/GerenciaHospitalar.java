@@ -19,62 +19,55 @@ import modelo.Paciente;
  */
 public class GerenciaHospitalar {
     private ArrayList <Paciente> cadastrados;
-    private ArrayList <Hospital> hospitais;
+    private Hospital hospital; // Ainda nao esta sendo utilizado, mas será
+    private GerenciarConsultasExames gce;
 
 
-    public GerenciaHospitalar() {
+    public GerenciaHospitalar(String nome, int limiteEmergencia) {
         this.cadastrados = new ArrayList<>();
-        this.hospitais = new ArrayList<>();
-    }
-
-    public void addHospital(Hospital h){
-        this.hospitais.add(h);
+        this.gce = new GerenciarConsultasExames();
+        this.hospital = new Hospital(nome, limiteEmergencia);
     }
 
     public void addPaciente(Paciente p){
         this.cadastrados.add(p);
     }
-
-    public ArrayList<Hospital> getHospitais() {
-        return this.hospitais;
-    }
-
+    
     public ArrayList<Paciente> getCadastrados() {
         return cadastrados;
     }
 
-
     public Consulta addConsulta(Paciente p, int numeroHospitalSelec, String especialidade, Medico m, LocalDate data, LocalTime horario){ 
         for(Paciente cadastrado : this.cadastrados){
             if(cadastrado == p){
-                Consulta c = hospitais.get(numeroHospitalSelec).addConsulta(especialidade, p, m, data, horario);
+                Consulta c = gce.agendarConsulta(especialidade, p, m, data, horario);
 		return c;
             }
         }
 	// não está cadastrado
         cadastrados.add(p);
-        Consulta c = hospitais.get(numeroHospitalSelec).addConsulta(especialidade, p, m, data, horario);
+        Consulta c = gce.agendarConsulta(especialidade, p, m, data, horario);
 	return c;
     }
 
     public boolean cancelarConsulta(Consulta c){
-        return c.getHospital().cancelarConsulta(c);
+        return gce.cancelarConsulta(c);
     }
     
     public Exame addExame(Paciente p, int numeroHospitalSelec, String especialidade, Medico m, LocalDate data, LocalTime horario){
 	for(Paciente cadastrado : this.cadastrados){
 	    if(cadastrado == p){
-		Exame e = hospitais.get(numeroHospitalSelec).addExame(especialidade, p, m, data, horario);
+		Exame e = gce.agendarExame(especialidade, p, m, data, horario);
 		return e;
 	    }
 	}
 	// não está cadastrado
 	cadastrados.add(p);
-	Exame e = hospitais.get(numeroHospitalSelec).addExame(especialidade, p, m, data, horario);
+	Exame e = gce.agendarExame(especialidade, p, m, data, horario);
 	return e;
     }
     
     public boolean cancelarExame(Exame e){
-	return e.getHospital().cancelarExame(e);
+	return gce.cancelarExame(e);
     }
 }

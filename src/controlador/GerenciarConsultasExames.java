@@ -10,14 +10,12 @@ import modelo.Medico;
 import modelo.Paciente;
 
 public class GerenciarConsultasExames {
-    private final Hospital hospital;
     private ArrayList<Consulta> consultas;
     private ArrayList<Exame> exames;
     
-    public GerenciarConsultasExames(Hospital hospital){
+    public GerenciarConsultasExames(){
 	this.consultas = new ArrayList<>();
 	this.exames = new ArrayList<>();
-	this.hospital = hospital;
     }
 
     public ArrayList<Consulta> getConsultas() {
@@ -37,7 +35,7 @@ public class GerenciarConsultasExames {
     }
     
     public Consulta agendarConsulta(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
-	Consulta c = new Consulta(this.hospital, especialidade, m, data, horario, p);
+	Consulta c = new Consulta(especialidade, m, data, horario, p);
         Consulta retorno = m.adicionarConsulta(c);
 	consultas.add(c);
         return retorno;
@@ -54,7 +52,7 @@ public class GerenciarConsultasExames {
     }
     
     public Exame agendarExame(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
-        Exame e = new Exame(this.hospital, especialidade, m, data, horario, p);
+        Exame e = new Exame(especialidade, m, data, horario, p);
         Exame retorno = m.adicionarExame(e);
         exames.add(e);
         return retorno;

@@ -1,8 +1,5 @@
 package modelo;
 
-import controlador.GerenciaHospitalar;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Paciente{
@@ -21,8 +18,6 @@ public class Paciente{
 
 	private ArrayList<Consulta> consultas;
 	private ArrayList<Exame> exames;
-
-	private GerenciaHospitalar gh;
 	private HistoricoMedico historicoMedico;
 
 	public Paciente(String nome, int idade, boolean sexo, String profissao, String endereco, String telefone,
@@ -43,32 +38,6 @@ public class Paciente{
 
 		this.consultas = new ArrayList<>();
 		this.exames = new ArrayList<>();
-
-		this.gh = new GerenciaHospitalar();
-	}
-
-	public void agendarConsulta(int numeroHospitalSelec, String especialidade, Medico m, LocalDate data, LocalTime horario){
-		Consulta c = gh.addConsulta(this, numeroHospitalSelec, especialidade, m, data, horario);
-		this.consultas.add(c);
-	}
-
-	public void agendarExame(int numeroHospitalSelec, String especialidade, Medico m, LocalDate data, LocalTime horario){
-		Exame e = gh.addExame(this, numeroHospitalSelec, especialidade, m, data, horario);
-		this.exames.add(e);
-	}
-	
-	public void cancelarConsulta(Consulta c){
-            boolean resultado = gh.cancelarConsulta(c);
-            if(resultado){
-                this.consultas.remove(c);
-            }
-	}
-	
-	public void cancelarExame(Exame e){
-	    boolean resultado = gh.cancelarExame(e);
-            if(resultado){
-                this.exames.remove(e);
-            }
 	}
 
 	public String getNome(){

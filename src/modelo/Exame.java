@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Exame {
-    private Hospital hospital;
     private String tipoExame;   
     private Medico medico;      
     private LocalDate data;    
@@ -15,8 +14,7 @@ public class Exame {
     private Status status; 
 
     // ========== Construtor ==========
-    public Exame(Hospital hospital, String tipoExame, Medico medico, LocalDate data, LocalTime horario, Paciente paciente) {
-        this.hospital = hospital;
+    public Exame(String tipoExame, Medico medico, LocalDate data, LocalTime horario, Paciente paciente) {
         this.tipoExame = tipoExame;
         this.medico = medico;
         this.data = data;
@@ -26,14 +24,6 @@ public class Exame {
     }
 
     // =========== Getters e Setters ===========
-    public Hospital getHospital() {
-        return hospital;
-    }
-
-    public void setHospital(Hospital hospital) {
-        this.hospital = hospital;
-    }
-
     public String getTipoExame() {
         return tipoExame;
     }
