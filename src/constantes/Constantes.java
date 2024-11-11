@@ -53,4 +53,7 @@ public class Constantes {
     public enum Status {
         AGENDADO, REALIZADO, CANCELADO
     }
+    
+    //Tamanho máximo de armazenamento do vetor persistenciaVetor
+    public static final int size_persistencia = 100;
 }

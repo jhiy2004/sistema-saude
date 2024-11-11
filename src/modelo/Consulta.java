@@ -21,8 +21,8 @@ public class Consulta {
 	this.paciente = paciente;
     }
     
-    public String criarReceitaMedica(String receitaId, String medicamento, String observacoes) {
-        this.receitaMedica = new ReceitaMedica(receitaId, this, medicamento, observacoes);
+    public String criarReceitaMedica(String medicamento, String observacoes) {
+        this.receitaMedica = new ReceitaMedica(paciente, medico, observacoes);
         return receitaMedica.toString();
     }
 
