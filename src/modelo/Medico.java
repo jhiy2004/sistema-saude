@@ -59,6 +59,7 @@ public class Medico {
         this.especialidadeMedica = especialidadeMedica;
     }
     
+    // métodos
     public Consulta adicionarConsulta(Consulta c)
     {
         Consulta retorno = agenda.adicionarHorarioConsulta(c);
