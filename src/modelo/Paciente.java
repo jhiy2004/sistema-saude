@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Paciente{
 	private String nome;
+        private String CPF;
 	private int idade;
 	private boolean sexo;
 	private String profissao;
@@ -20,11 +21,12 @@ public class Paciente{
 	private ArrayList<Exame> exames;
 	private HistoricoMedico historicoMedico;
 
-	public Paciente(String nome, int idade, boolean sexo, String profissao, String endereco, String telefone,
+	public Paciente(String nome, String CPF,int idade, boolean sexo, String profissao, String endereco, String telefone,
 					double peso, double altura, String tipoSanguineo, boolean usoMedicamentos, boolean usoCigarroAlcool,
 					boolean praticaExercicios){
 		this.nome = nome;
 		this.idade = idade;
+                this.CPF = CPF;
 		this.sexo = sexo;
 		this.profissao = profissao;
 		this.endereco = endereco;
@@ -43,6 +45,10 @@ public class Paciente{
 	public String getNome(){
 		return this.nome;
 	}
+        
+        public String getCPF(){
+            return this.CPF;
+        }
 
 	public int getIdade(){
 		return this.idade;
@@ -99,6 +105,10 @@ public class Paciente{
 	public void setNome(String nome){
 		this.nome = nome;
 	}
+        
+        public void setCPF(String CPF){
+            this.CPF = CPF;
+        }
 
 	public void setIdade(int idade){
 		this.idade = idade;
