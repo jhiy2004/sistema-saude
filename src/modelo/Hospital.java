@@ -56,6 +56,15 @@ public class Hospital {
         
         return medicos;
     }
+    
+    public void removerMed(Medico m){
+        for(Departamento d : this.departamentos){
+            if(d.getCod().equals(m.getEspecialidadeMedica())){
+                d.removerMed(m);
+                return;
+            }
+        }  
+    }
 
     public void addMed(Medico m){
         for(Departamento d : this.departamentos){
@@ -63,14 +72,14 @@ public class Hospital {
                 d.addMed(m);
                 return;
             }
-
-            Departamento novo = new Departamento();
-            novo.setNome("Departamento de "+m.getEspecialidadeMedica());
-            novo.setCod(m.getEspecialidadeMedica());
-            novo.addMed(m);
-
-            this.departamentos.add(novo);
         }    
+        
+        Departamento novo = new Departamento();
+        novo.setNome("Departamento de "+m.getEspecialidadeMedica());
+        novo.setCod(m.getEspecialidadeMedica());
+        novo.addMed(m);
+
+        this.departamentos.add(novo);
     }
 
     public boolean internar(Paciente p){

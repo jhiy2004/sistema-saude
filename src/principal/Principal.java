@@ -6,7 +6,6 @@ import controlador.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class Principal {
@@ -15,6 +14,14 @@ public class Principal {
     public static void menuPrincipal(){
         int opc = 0;
         
+        int indiceMedico = 0;
+        int indicePaciente = 0;
+        
+        ArrayList<Medico> medicos = null;
+        ArrayList<Paciente> pacientes = null;
+
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        
         do{
             System.out.println("========= Principal =========");
             System.out.println("1 - Adicionar paciente");
@@ -22,24 +29,23 @@ public class Principal {
             System.out.println("3 - Adicionar exame");
             System.out.println("4 - Adicionar consulta");
             System.out.println("5 - Adicionar medicamento");
-            System.out.println("6 - Adicionar departamento");
 
-            System.out.println("7 - Remover paciente");
-            System.out.println("8 - Remover médico");
-            System.out.println("9 - Remover exame");
-            System.out.println("10 - Remover consulta");
-            System.out.println("11 - Remover medicamento");
-            System.out.println("12 - Remover departamento");
+            System.out.println("6 - Remover paciente");
+            System.out.println("7 - Remover médico");
+            System.out.println("8 - Remover exame");
+            System.out.println("9 - Remover consulta");
+            System.out.println("10 - Remover medicamento");
+            
+            System.out.println("11 - Listar pacientes");
+            System.out.println("12 - Listar médicos");
+            System.out.println("13 - Listar exames por médico");
+            System.out.println("14 - Listar exames por paciente");
+            System.out.println("15 - Listar consultas por médico");
+            System.out.println("16 - Listar consultas por paciente");
+            System.out.println("17 - Listar departamentos");
 
-            System.out.println("13 - Listar pacientes");
-            System.out.println("14 - Listar médicos");
-            System.out.println("15 - Listar exames por médico");
-            System.out.println("16 - Listar exames por paciente");
-            System.out.println("17 - Listar consultas por médico");
-            System.out.println("18 - Listar consultas por paciente");
-
-            System.out.println("19 - Gerar relatório de estoque");
-            System.out.println("20 - Gerar relatório de departamentos");
+            System.out.println("18 - Gerar relatório de estoque");
+            System.out.println("19 - Gerar relatório de departamentos");
             System.out.println("0 - Sair");
             
             System.out.print("Digite a opção: ");
@@ -51,12 +57,42 @@ public class Principal {
                 case 1:
                     menuPaciente();
                     break;
+                    
+                case 2:
+                    menuMedico();
+                    break;
+                
+                case 6:
+                    pacientes = gh.getCadastrados();
+                    indicePaciente = selecionarPaciente(pacientes);
+                    
+                    gh.removerPaciente(pacientes.get(indicePaciente));
+                    break;
+                    
+                case 7:
+                    medicos = gh.getMedicos();
+                    indiceMedico = selecionarMedico(medicos);
+                  
+                    gh.removerMedico(medicos.get(indiceMedico));
+                    break;
+                            
+                    
+                case 11:
+                    listarPacientes();
+                    break;
+                    
+                case 12:
+                    listarMedicos();
+                    break;
+                    
+                case 17:
+                    listarDepartamentos();
+                    break;
+                    
                 case 0:
                     System.out.println("Saindo...");
                     break;
-                case 13:
-                    listarPacientes();
-                    break;
+                    
                 default:
                     System.out.println("Opção inválida");
                     break;
@@ -181,7 +217,8 @@ public class Principal {
                         p = null;
                         System.out.println("Saindo sem salvar");
                     }
-                    System.out.println("Voltando para o menu principal");                    break;
+                    System.out.println("Voltando para o menu principal");
+                    break;
                 default:
                     System.out.println("Opção inválida");
                     break;
@@ -190,13 +227,75 @@ public class Principal {
     }
     
     public static void menuMedico(){
-        System.out.println("========= Medico =========");
-        System.out.println("1 - Nome");
-        System.out.println("2 - Crm");
-        System.out.println("3 - Especialidade médica");
-        System.out.println("4 - Salário");
-        System.out.println("5 - Escolher departamento");
-        System.out.println("0 - Voltar para menu principal");
+        int opc = 0;
+        boolean salvar = false;
+        
+        String crm = "";
+        String especialidade = Constantes.CARDIOLOGIA;
+        String nome = "";
+        float salario = 0.0f;
+        
+        Medico m = new Medico(crm, especialidade, nome, salario);
+        
+        do{
+            System.out.println("========= Medico =========");
+            System.out.println("1 - Nome");
+            System.out.println("2 - Crm");
+            System.out.println("3 - Especialidade médica");
+            System.out.println("4 - Salário");
+            System.out.println("0 - Voltar para menu principal");
+            
+            System.out.print("Digite a opção: ");
+            opc = sc.nextInt();
+            
+            sc.nextLine();
+            
+            switch(opc){
+                case 1:
+                    System.out.print("Digite o nome do médico: ");
+                    nome = sc.nextLine();
+                    
+                    m.setNome(nome);
+                    break;
+                    
+                case 2:
+                    System.out.print("Digite o CRM do médico: ");
+                    crm = sc.nextLine();
+                    
+                    m.setCrm(crm);
+                    break;
+                case 3:
+                    especialidade = selecionarEspecialidade();
+                    
+                    m.setEspecialidadeMedica(especialidade);
+                    break;
+                case 4:
+                    System.out.print("Digite o salário do médico: ");
+                    salario = sc.nextFloat();
+                    
+                    m.setSalario(salario);
+                    break;
+                case 0:
+                    relatorioMedico(m);
+                    salvar = selecionarSimNao("O médico está dessa forma, deseja salvar");
+                    
+                    if(salvar == true){
+                        System.out.println("Salvando médico");
+                        
+                        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+
+                        gh.addMedico(m);
+                    }else{
+                        m = null;
+                        System.out.println("Saindo sem salvar");
+                    }
+                    System.out.println("Voltando para o menu principal");
+                    break;
+                default:
+                    System.out.println("Opção inválida");
+                    break;
+            }
+        }while(opc != 0);
     }
     
     public static void menuMedicamento(){
@@ -206,13 +305,6 @@ public class Principal {
         System.out.println("3 - Data validade");
         System.out.println("4 - Quantidade");
         System.out.println("5 - Fabricante");
-        System.out.println("0 - Voltar para menu principal");
-    }
-    
-    public static void menuDepartamento(){
-        System.out.println("========= Departamento =========");
-        System.out.println("1 - Nome");
-        System.out.println("2 - Codigo");
         System.out.println("0 - Voltar para menu principal");
     }
     
@@ -404,7 +496,30 @@ public class Principal {
         }while(opc != 0);
         
         return hm;
-    }    
+    }   
+    
+    public static void listarDepartamentos(){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        
+        System.out.println("========== Departamentos ===========");
+        for(Departamento d : gh.getDepartamentos()){
+            relatorioDepartamento(d);
+        }
+        System.out.println("====================================");
+
+    }
+    
+    public static void listarMedicos(){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        
+        System.out.println("============= Medicos ==============");
+        for(Medico m : gh.getMedicos()){
+            relatorioMedico(m);
+        }
+        System.out.println("====================================");
+
+    }
+    
     public static void listarPacientes(){
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
         
@@ -415,6 +530,41 @@ public class Principal {
         System.out.println("====================================");
 
     }
+    
+    public static void relatorioDepartamento(Departamento d){
+        if(d == null){
+            System.out.println("Departamento ainda não foi criado");
+            return;
+        }
+             
+        System.out.println("============== Departamento ==============");
+        
+        System.out.println(String.format("Nome: %s", d.getNome()));
+        System.out.println(String.format("Cod: %s", d.getCod()));
+        System.out.println("Médicos:");
+        System.out.println("============= Medicos ==============");
+        for(Medico m : d.getMedicos()){
+            relatorioMedico(m);
+        }
+        System.out.println("====================================");
+    }
+    
+    public static void relatorioMedico(Medico m){
+        if(m == null){
+            System.out.println("Médico ainda não foi criado");
+            return;
+        }
+             
+        System.out.println("============== Médico ==============");
+        
+        System.out.println(String.format("Nome: %s", m.getNome()));
+        System.out.println(String.format("Especialidade médica: %s", m.getEspecialidadeMedica()));
+        System.out.println(String.format("CRM: %s", m.getCrm()));
+        System.out.println(String.format("Salário: %.2f", m.getSalario()));
+        
+        System.out.println("====================================");
+    }
+    
     public static void relatorioPaciente(Paciente p){
         if(p == null){
             System.out.println("Paciente ainda não foi criado");
@@ -507,15 +657,11 @@ public class Principal {
         String[] tipos = {Constantes.A_MAIS, Constantes.A_MENOS, Constantes.B_MAIS, Constantes.B_MENOS,
                             Constantes.AB_MAIS, Constantes.AB_MENOS, Constantes.O_MAIS, Constantes.O_MENOS};
         
-        while(opc < 1 || opc > 8){
-            System.out.println(String.format("1 - %s", Constantes.A_MAIS));
-            System.out.println(String.format("2 - %s", Constantes.A_MENOS));
-            System.out.println(String.format("3 - %s", Constantes.B_MAIS));
-            System.out.println(String.format("4 - %s", Constantes.B_MENOS));
-            System.out.println(String.format("5 - %s", Constantes.AB_MAIS));
-            System.out.println(String.format("6 - %s", Constantes.AB_MENOS));
-            System.out.println(String.format("7 - %s", Constantes.O_MAIS));
-            System.out.println(String.format("8 - %s", Constantes.O_MENOS));
+        while(opc < 1 || opc > tipos.length){
+            for(int cont=1; cont < tipos.length; cont++){
+                int pos = cont - 1;
+                System.out.println(String.format("%d - %s", cont, tipos[pos]));
+            }
             
             System.out.print("Escolha o tipo sanguíneo: ");
             opc = sc.nextInt();
@@ -524,7 +670,28 @@ public class Principal {
         }
         opc--;
         return tipos[opc];
-     }
+    }
+    
+    public static String selecionarEspecialidade(){
+        int opc = 0;
+        String[] especialidades = {Constantes.CARDIOLOGIA, Constantes.DERMATOLOGIA, Constantes.ENDOCRINOLOGIA, Constantes.GASTROENTEROLOGIA,
+                            Constantes.GERIATRIA, Constantes.GINECOLOGIA, Constantes.NEUROLOGIA, Constantes.OFTALMOLOGIA, Constantes.ORTOPEDIA,
+                            Constantes.PEDIATRIA, Constantes.PSIQUIATRIA, Constantes.UROLOGIA};
+        
+        while(opc < 1 || opc > especialidades.length){
+            for(int cont=1; cont < especialidades.length; cont++){
+                int pos = cont - 1;
+                System.out.println(String.format("%d - %s", cont, especialidades[pos]));
+            }
+            
+            System.out.print("Escolha a especialidade médica: ");
+            opc = sc.nextInt();
+            
+            sc.nextLine();
+        }
+        opc--;
+        return especialidades[opc];
+    }
     
     public static boolean selecionarSexo(){
         int opc = 0;
@@ -574,23 +741,6 @@ public class Principal {
         opc--;
         return opc;
     }
-        
-    public static int selecionarDepartamento(ArrayList<Departamento> departamentos){
-        int opc = 0;
-        
-        while(opc < 1 || opc > departamentos.size()){
-            int cont = 1;
-            for(Departamento d : departamentos){
-                System.out.println(String.format("%d - %s", cont, d.getNome()));
-                cont++;
-            }
-            System.out.print("\nDigite o número do departamento: ");
-            opc = sc.nextInt();
-        }
-        
-        opc--;
-        return opc;
-    }
     
     public static void relatorioConsulta(Consulta consulta){
         System.out.println("Médico responsável:");
@@ -599,13 +749,6 @@ public class Principal {
         relatorioPaciente(consulta.getPaciente());
         System.out.println("Receita medica:");
         relatorioReceita(consulta.getReceita());
-    }
-    
-    public static void relatorioMedico(Medico medico){
-        System.out.println("Nome: " + medico.getNome());
-        System.out.println("CRM: " + medico.getCrm());
-        System.out.println("Especialidade: " + medico.getEspecialidadeMedica());
-        System.out.println("Salário: " + medico.getSalario());
     }
     
     public static void relatorioReceita(ReceitaMedica receita){

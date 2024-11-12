@@ -3,3 +3,4 @@ bin/
 *.properties
 /nbproject/private/
 /build/
+log.txt
