@@ -1,4 +1,4 @@
-package modelo;
+package interfaces;
 
 /**
  * Interface que define os métodos para os produtos hospitalares.

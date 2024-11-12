@@ -2,3 +2,4 @@ bin/
 *.xml
 *.properties
 /nbproject/private/
+/build/

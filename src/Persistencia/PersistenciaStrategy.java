@@ -1,6 +1,6 @@
 package Persistencia;
 
-import modelo.DocumentoEmitivel;
+import interfaces.DocumentoEmitivel;
 
 /**
  * Interface que define a estratégia de persistência para documentos médicos.

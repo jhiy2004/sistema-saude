@@ -13,17 +13,14 @@ public class Paciente{
 	private double peso;
 	private double altura;
 	private String tipoSanguineo;
-	private boolean usoMedicamentos;
-	private boolean usoCigarroAlcool;
-	private boolean praticaExercicios;
+
 
 	private ArrayList<Consulta> consultas;
 	private ArrayList<Exame> exames;
 	private HistoricoMedico historicoMedico;
 
 	public Paciente(String nome, String CPF,int idade, boolean sexo, String profissao, String endereco, String telefone,
-					double peso, double altura, String tipoSanguineo, boolean usoMedicamentos, boolean usoCigarroAlcool,
-					boolean praticaExercicios){
+					double peso, double altura, String tipoSanguineo, HistoricoMedico historicoMedico){
 		this.nome = nome;
 		this.idade = idade;
                 this.CPF = CPF;
@@ -34,9 +31,7 @@ public class Paciente{
 		this.peso = peso;
 		this.altura = altura;
 		this.tipoSanguineo = tipoSanguineo;
-		this.usoMedicamentos = usoMedicamentos;
-		this.usoCigarroAlcool = usoCigarroAlcool;
-		this.praticaExercicios = praticaExercicios;
+                this.historicoMedico = historicoMedico;
 
 		this.consultas = new ArrayList<>();
 		this.exames = new ArrayList<>();
@@ -82,17 +77,7 @@ public class Paciente{
 		return this.tipoSanguineo;
 	}
 
-	public boolean getUsoMedicamentos(){
-		return this.usoMedicamentos;
-	}
 
-	public boolean getUsoCigarroAlcool(){
-		return this.usoCigarroAlcool;
-	}
-
-	public boolean getPraticaExercicios(){
-		return this.praticaExercicios;
-	}
 
 	public ArrayList<Consulta> getConsultas(){
 		return this.consultas;
@@ -141,17 +126,4 @@ public class Paciente{
 	public void setTipoSanguineo(String tipoSanguineo){
 		this.tipoSanguineo = tipoSanguineo;
 	}
-
-	public void setUsoMedicamentos(boolean usoMedicamentos){
-		this.usoMedicamentos = usoMedicamentos;
-	}
-
-	public void setUsoCigarroAlcool(boolean usoCigarroAlcool){
-		this.usoCigarroAlcool = usoCigarroAlcool;
-	}
-
-	public void setPraticaExercicios(boolean praticaExercicios){
-		this.praticaExercicios = praticaExercicios;
-	}
-
 }

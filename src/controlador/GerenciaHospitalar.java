@@ -21,14 +21,22 @@ public class GerenciaHospitalar {
     private ArrayList <Paciente> cadastrados;
     private Hospital hospital; // Ainda nao esta sendo utilizado, mas será
     private GerenciarConsultasExames gce;
+    private static GerenciaHospitalar instance;
 
 
-    public GerenciaHospitalar(String nome, int limiteEmergencia) {
+    private GerenciaHospitalar(String nome, int limiteEmergencia) {
         this.cadastrados = new ArrayList<>();
         this.gce = new GerenciarConsultasExames();
         this.hospital = new Hospital(nome, limiteEmergencia);
     }
 
+    public static GerenciaHospitalar getInstance(){
+        if(instance == null){
+            instance = new GerenciaHospitalar("Hospital", 10);
+        }
+        return instance;
+    }
+    
     public void addPaciente(Paciente p){
         this.cadastrados.add(p);
     }
