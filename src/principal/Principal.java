@@ -248,25 +248,15 @@ public class Principal {
         System.out.println("Salário: " + medico.getSalario());
     }
     
-    public static void relatorioPaciente(Paciente paciente){
-        System.out.println("Nome: " + paciente.getNome());
-        System.out.println("Idade: " + paciente.getIdade());
-        System.out.println("Sexo: " + paciente.getSexo());
-        System.out.println("CPF: " + paciente.getSexo());
-        System.out.println("Profissao: " + paciente.getProfissao());
-        System.out.println("Endereço: " + paciente.getEndereco());
-        System.out.println("Telefone: " + paciente.getTelefone());
-        System.out.println("Peso: " + paciente.getPeso());
-        System.out.println("Altura: " + paciente.getAltura());
-        System.out.println("Tipo sanguíneo: " + paciente.getTipoSanguineo());
-        // Implementar relatorioHistoricoMedico()?
-    }
-    
     public static void relatorioReceita(ReceitaMedica receita){
         System.out.println("Observações: " + receita.getObservacoes());
         System.out.println("Prescrições:");
-        for(Prescricao p : receita.getPrescricoes()){
-            relatorioPrescricao(p);
+        if(receita.getPrescricoes() != null){
+            for(Prescricao p : receita.getPrescricoes()){
+                relatorioPrescricao(p);
+            }
+        }else{
+            System.out.println("Não existem prescrições cadastradas");
         }
     }
     
