@@ -64,8 +64,13 @@ public class HistoricoMedico{
 		return this.doencasCronicas;
 	}
 
-	public void setHistoricoMedicamentos(String historicoMedicamentos){
+        public void setHistoricoMedicamentos(String historicoMedicamentos){
 		this.historicoMedicamentos = historicoMedicamentos;
+		this.atualizarDataParaAtual();
+	}
+        
+	public void setHistoricoFamiliar(String historicoFamiliar){
+		this.historicoFamiliar = historicoFamiliar;
 		this.atualizarDataParaAtual();
 	}
 

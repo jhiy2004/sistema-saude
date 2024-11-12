@@ -6,7 +6,7 @@ public class Paciente{
 	private String nome;
         private String CPF;
 	private int idade;
-	private boolean sexo;
+	private boolean sexo; // true -> masculino; false -> feminino
 	private String profissao;
 	private String endereco;
 	private String telefone;
@@ -76,6 +76,10 @@ public class Paciente{
 	public String getTipoSanguineo(){
 		return this.tipoSanguineo;
 	}
+        
+        public HistoricoMedico getHistoricoMedico(){
+            return this.historicoMedico;
+        }
 
 
 
@@ -126,4 +130,7 @@ public class Paciente{
 	public void setTipoSanguineo(String tipoSanguineo){
 		this.tipoSanguineo = tipoSanguineo;
 	}
+        public void setHistoricoMedico(HistoricoMedico historicoMedico){
+            this.historicoMedico = historicoMedico;
+        }
 }
