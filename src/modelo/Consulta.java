@@ -11,14 +11,16 @@ public class Consulta {
     private ReceitaMedica receitaMedica;
     private LocalTime horario;
     private Paciente paciente;
+    private ReceitaMedica receita;
     private Status status;
     
-    public Consulta(String especialidade, Medico medico, LocalDate data, LocalTime horario, Paciente paciente){
+    public Consulta(String especialidade, Medico medico, LocalDate data, LocalTime horario, Paciente paciente, ReceitaMedica receita){
 	this.especialidade = especialidade;
 	this.medico = medico;
 	this.data = data;
 	this.horario = horario;
 	this.paciente = paciente;
+        this.receita = receita;
     }
     
     public String criarReceitaMedica(String medicamento, String observacoes) {
@@ -72,7 +74,15 @@ public class Consulta {
     }
     
     public Status getStatus() {
-        return this.status;
+        return status;
+    }
+    
+    public void setReceita(ReceitaMedica receita){
+        this.receita = receita;
+    }
+    
+    public ReceitaMedica getReceita(){
+        return receita;
     }
     
     public void setStatus(Status status) {

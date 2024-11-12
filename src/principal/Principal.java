@@ -2,10 +2,14 @@ package principal;
 
 import modelo.*;
 import controlador.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Principal {
+    public static Scanner sc = new Scanner(System.in);
+    
     public static void menuPrincipal(){
         System.out.println("========= Principal =========");
         System.out.println("1 - Adicionar paciente");
@@ -78,11 +82,69 @@ public class Principal {
     }
     
     public static void menuConsulta(){
-        System.out.println("========= Consulta =========");
-        System.out.println("1 - Escolher paciente");
-        System.out.println("2 - Escolher médico");
-        System.out.println("3 - Criar receita");
-        System.out.println("0 - Voltar para menu principal");
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        int opc;
+        Paciente paciente = null;
+        Medico medico = null;
+        String observacoes;
+        ReceitaMedica receita = null;
+        
+        while(true){
+            System.out.println("========= Consulta =========");
+            System.out.println("1 - Escolher paciente");
+            System.out.println("2 - Escolher médico");
+            System.out.println("3 - Criar receita");
+            System.out.println("0 - Voltar para menu principal");
+            System.out.print("Digite a opção: ");
+            opc = sc.nextInt();
+            
+            switch(opc){
+                case 1:
+                    ArrayList<Paciente> pacientes = gh.getCadastrados();
+                    int pacienteIndex = selecionarPaciente(pacientes);
+                    paciente = pacientes.get(pacienteIndex);
+                    break;
+                case 2:
+                    ArrayList<Medico> medicos = gh.getMedicos();
+                    int medicoIndex = selecionarMedico(medicos);
+                    medico = medicos.get(medicoIndex);
+                    break;
+                case 3:
+                    if(paciente != null && medico != null && receita == null){
+                        System.out.print("Digite as observações da receita: ");
+                        observacoes = sc.nextLine();
+                        receita = new ReceitaMedica(paciente, medico, observacoes);
+                        System.out.println("Receita criada com sucesso!");
+                        System.out.print("Pressione Enter para continuar...");
+                        sc.nextLine();
+                    }else{
+                        System.out.println("Impossível criar Receita");
+                        System.out.print("Pressione Enter para continuar...");
+                        sc.nextLine();
+                    }
+                    break;
+                case 0:
+                    if(paciente != null && medico != null && receita != null){
+                        // MODIFICAR O DATE E TIME
+                        Consulta consulta = new Consulta(medico.getEspecialidadeMedica(), medico, LocalDate.MAX, LocalTime.MIN, paciente, receita);
+                        System.out.println("Dados da Consulta:");
+                        relatorioConsulta(consulta);
+                        System.out.print("Pressione Enter para continuar...");
+                        sc.nextLine();
+                        return;
+                    }else{
+                        System.out.println("Existem dados faltantes para criar a receita!");
+                        System.out.print("Pressione Enter para continuar...");
+                        sc.nextLine();
+                    }
+                    break;
+                default:
+                    System.out.println("Digite uma opção válida!");
+                    System.out.print("Pressione Enter para continuar...");
+                    sc.nextLine();
+                    break;
+            }
+        }
     }
     
     public static void menuReceita(Paciente p, Medico m){
@@ -120,8 +182,6 @@ public class Principal {
         System.out.println("0 - Voltar para menu principal");
     }
     public static int selecionarPaciente(ArrayList<Paciente> pacientes){
-        Scanner sc = new Scanner(System.in);
-          
         int opc = 0;
         
         while(opc < 1 || opc > pacientes.size()){
@@ -139,8 +199,6 @@ public class Principal {
     }
     
     public static int selecionarMedico(ArrayList<Medico> medicos){
-        Scanner sc = new Scanner(System.in);
-                  
         int opc = 0;
         
         while(opc < 1 || opc > medicos.size()){
@@ -158,8 +216,6 @@ public class Principal {
     }
         
     public static int selecionarDepartamento(ArrayList<Departamento> departamentos){
-        Scanner sc = new Scanner(System.in);
-                  
         int opc = 0;
         
         while(opc < 1 || opc > departamentos.size()){
@@ -174,6 +230,57 @@ public class Principal {
         
         opc--;
         return opc;
+    }
+    
+    public static void relatorioConsulta(Consulta consulta){
+        System.out.println("Médico responsável:");
+        relatorioMedico(consulta.getMedico());
+        System.out.println("Paciente da consulta:");
+        relatorioPaciente(consulta.getPaciente());
+        System.out.println("Receita medica:");
+        relatorioReceita(consulta.getReceita());
+    }
+    
+    public static void relatorioMedico(Medico medico){
+        System.out.println("Nome: " + medico.getNome());
+        System.out.println("CRM: " + medico.getCrm());
+        System.out.println("Especialidade: " + medico.getEspecialidadeMedica());
+        System.out.println("Salário: " + medico.getSalario());
+    }
+    
+    public static void relatorioPaciente(Paciente paciente){
+        System.out.println("Nome: " + paciente.getNome());
+        System.out.println("Idade: " + paciente.getIdade());
+        System.out.println("Sexo: " + paciente.getSexo());
+        System.out.println("CPF: " + paciente.getSexo());
+        System.out.println("Profissao: " + paciente.getProfissao());
+        System.out.println("Endereço: " + paciente.getEndereco());
+        System.out.println("Telefone: " + paciente.getTelefone());
+        System.out.println("Peso: " + paciente.getPeso());
+        System.out.println("Altura: " + paciente.getAltura());
+        System.out.println("Tipo sanguíneo: " + paciente.getTipoSanguineo());
+        // Implementar relatorioHistoricoMedico()?
+    }
+    
+    public static void relatorioReceita(ReceitaMedica receita){
+        System.out.println("Observações: " + receita.getObservacoes());
+        System.out.println("Prescrições:");
+        for(Prescricao p : receita.getPrescricoes()){
+            relatorioPrescricao(p);
+        }
+    }
+    
+    public static void relatorioPrescricao(Prescricao prescricao){
+        System.out.println("Medicamento:");
+        relatorioMedicamento(prescricao.getMedicamento());
+        System.out.println("Dosagem: " + prescricao.getDosagem());
+        System.out.println("Instruções: " + prescricao.getInstrucoes());
+    }
+    
+    public static void relatorioMedicamento(Medicamento medicamento){
+        System.out.println("Nome: " + medicamento.getNome());
+        System.out.println("Código: " + medicamento.getCodigo());
+        System.out.println("Fabricante: " + medicamento.getFabricante());
     }
     
     public static void seed(){

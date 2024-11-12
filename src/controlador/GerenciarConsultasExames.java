@@ -5,9 +5,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import modelo.Consulta;
 import modelo.Exame;
-import modelo.Hospital;
 import modelo.Medico;
 import modelo.Paciente;
+import modelo.ReceitaMedica;
 
 public class GerenciarConsultasExames {
     private ArrayList<Consulta> consultas;
@@ -34,8 +34,8 @@ public class GerenciarConsultasExames {
 	this.exames = exames;
     }
     
-    public Consulta agendarConsulta(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
-	Consulta c = new Consulta(especialidade, m, data, horario, p);
+    public Consulta agendarConsulta(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario, ReceitaMedica r){
+	Consulta c = new Consulta(especialidade, m, data, horario, p, r);
         Consulta retorno = m.adicionarConsulta(c);
 	consultas.add(c);
         return retorno;

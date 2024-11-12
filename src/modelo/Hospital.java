@@ -46,6 +46,16 @@ public class Hospital {
     public void setLimiteEmergencia(int limiteEmergencia){
         this.limiteEmergencia = limiteEmergencia;
     }
+    
+    public ArrayList<Medico> getMedicos(){
+        ArrayList<Medico> medicos = new ArrayList<>();
+        
+        for(Departamento d : departamentos){
+            medicos.addAll(d.getMedicos());
+        }
+        
+        return medicos;
+    }
 
     public void addMed(Medico m){
         for(Departamento d : this.departamentos){

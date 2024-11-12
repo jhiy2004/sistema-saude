@@ -12,6 +12,7 @@ import modelo.Exame;
 import modelo.Hospital;
 import modelo.Medico;
 import modelo.Paciente;
+import modelo.ReceitaMedica;
 
 /**
  *
@@ -44,17 +45,21 @@ public class GerenciaHospitalar {
     public ArrayList<Paciente> getCadastrados() {
         return cadastrados;
     }
+    
+    public ArrayList<Medico> getMedicos(){
+        return hospital.getMedicos();
+    }
 
-    public Consulta addConsulta(Paciente p, int numeroHospitalSelec, String especialidade, Medico m, LocalDate data, LocalTime horario){ 
+    public Consulta addConsulta(Paciente p, int numeroHospitalSelec, String especialidade, Medico m, LocalDate data, LocalTime horario, ReceitaMedica r){ 
         for(Paciente cadastrado : this.cadastrados){
             if(cadastrado == p){
-                Consulta c = gce.agendarConsulta(especialidade, p, m, data, horario);
+                Consulta c = gce.agendarConsulta(especialidade, p, m, data, horario, r);
 		return c;
             }
         }
 	// não está cadastrado
         cadastrados.add(p);
-        Consulta c = gce.agendarConsulta(especialidade, p, m, data, horario);
+        Consulta c = gce.agendarConsulta(especialidade, p, m, data, horario, r);
 	return c;
     }
 
