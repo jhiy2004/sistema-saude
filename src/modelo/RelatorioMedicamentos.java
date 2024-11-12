@@ -11,7 +11,7 @@ public class RelatorioMedicamentos implements Relatorio {
     }
 
     @Override
-    public void exibirRelatorio(Hospital h) {
+    public  void exibirRelatorio(Hospital h) {
         String relatorio = gerarRelatorio(h);
         System.out.println(relatorio);
     }
