@@ -113,7 +113,17 @@ public class ReceitaMedica extends DocumentoMedico {
      * 
      * @param strategy A estratégia de persistência para salvar o objeto.
      */
+    @Override
     public void salvar(PersistenciaStrategy strategy){
+        strategy.salvar(this);
+    }
+    
+    /**
+     * Método para salvar a receita médica utilizando a estratégia de arquvios por padrão.
+     *      
+     */
+    public void salvar(){
+        PersistenciaStrategy strategy = new PersistenciaArquivo();
         strategy.salvar(this);
     }
 
