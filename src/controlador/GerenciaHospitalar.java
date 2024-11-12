@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import modelo.Consulta;
+import modelo.Departamento;
 import modelo.Exame;
 import modelo.Hospital;
 import modelo.Medico;
@@ -39,7 +40,35 @@ public class GerenciaHospitalar {
     }
     
     public void addPaciente(Paciente p){
+        Logger logger = Logger.getInstance();
+        
         this.cadastrados.add(p);
+        
+        logger.gravaArquivo(String.format("Paciente '%s' adicionado", p.getNome()), Logger.Level.INFO);
+    }
+    
+    public void removerPaciente(Paciente p){
+        Logger logger = Logger.getInstance();
+
+        this.cadastrados.remove(p);
+        
+        logger.gravaArquivo(String.format("Paciente '%s' removido", p.getNome()), Logger.Level.INFO);
+
+    }
+    
+    public void addMedico(Medico m){
+        Logger logger = Logger.getInstance();
+
+        this.hospital.addMed(m);
+        
+        logger.gravaArquivo(String.format("Médico '%s' adicionado", m.getNome()), Logger.Level.INFO);
+    }
+    
+    public void removerMedico(Medico m){
+        Logger logger = Logger.getInstance();
+
+        this.hospital.removerMed(m);
+        logger.gravaArquivo(String.format("Médico '%s' removido", m.getNome()), Logger.Level.INFO);
     }
     
     public ArrayList<Paciente> getCadastrados() {
@@ -48,6 +77,10 @@ public class GerenciaHospitalar {
     
     public ArrayList<Medico> getMedicos(){
         return hospital.getMedicos();
+    }
+    
+    public ArrayList<Departamento> getDepartamentos(){
+        return hospital.getDepartamentos();
     }
 
     public Consulta addConsulta(Paciente p, int numeroHospitalSelec, String especialidade, Medico m, LocalDate data, LocalTime horario, ReceitaMedica r){ 

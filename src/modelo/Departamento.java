@@ -26,6 +26,10 @@ public class Departamento {
         this.medicos = new ArrayList<>();
     }
 
+    public void removerMed(Medico m){
+        this.medicos.remove(m);
+    }
+    
     public Medico buscarMedCrm(String Crm){
         for(Medico m : this.medicos){
             if(m.getCrm().equals(Crm)){
