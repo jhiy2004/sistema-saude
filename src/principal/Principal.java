@@ -21,6 +21,8 @@ public class Principal {
         ArrayList<Paciente> pacientes = null;
 
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        RelatorioDepartamentos rd = new RelatorioDepartamentos();
+        RelatorioMedicamentos rm = new RelatorioMedicamentos();
         
         do{
             System.out.println("========= Principal =========");
@@ -87,6 +89,14 @@ public class Principal {
                     
                 case 17:
                     listarDepartamentos();
+                    break;
+                
+                case 18:
+                    rm.exibirRelatorio(gh.getHospital());
+                    break;
+                
+                case 19:
+                    rd.exibirRelatorio(gh.getHospital());
                     break;
                     
                 case 0:
