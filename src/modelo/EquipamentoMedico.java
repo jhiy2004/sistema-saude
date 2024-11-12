@@ -1,5 +1,6 @@
 package modelo;
 
+import interfaces.ProdutoHospitalar;
 import java.time.LocalDate;
 
 /**

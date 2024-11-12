@@ -9,21 +9,41 @@ public class HistoricoMedico{
 	private String historicoCirurgias;
 	private String doencasPrevias;
 	private String doencasCronicas;
+        
+        private boolean usoMedicamentos;
+	private boolean usoCigarroAlcool;
+	private boolean praticaExercicios;
 
 	public HistoricoMedico(String historicoFamiliar, String historicoMedicamentos, String historicoCirurgias,
-							String doencasPrevias, String doencasCronicas){
+                                String doencasPrevias, String doencasCronicas, boolean usoMedicamentos, boolean usoCigarroAlcool,
+				boolean praticaExercicios){
+            
 		this.dataModificacao = LocalDateTime.now();
 		this.historicoFamiliar = historicoFamiliar;
 		this.historicoMedicamentos = historicoMedicamentos;
 		this.historicoCirurgias = historicoCirurgias;
 		this.doencasPrevias = doencasPrevias;
 		this.doencasCronicas = doencasPrevias;
+                this.usoMedicamentos = usoMedicamentos;
+		this.usoCigarroAlcool = usoCigarroAlcool;
+		this.praticaExercicios = praticaExercicios;
 	}
 
 	public LocalDateTime getData(){
 		return this.dataModificacao;
 	}
 
+        public boolean getUsoMedicamentos(){
+		return this.usoMedicamentos;
+	}
+
+	public boolean getUsoCigarroAlcool(){
+		return this.usoCigarroAlcool;
+	}
+
+	public boolean getPraticaExercicios(){
+		return this.praticaExercicios;
+	}
 	public String getHistoricoFamiliar(){
 		return this.historicoFamiliar;
 	}
@@ -63,6 +83,19 @@ public class HistoricoMedico{
 		this.doencasCronicas = doencasCronicas;
 		this.atualizarDataParaAtual();
 	}
+        
+        public void setUsoMedicamentos(boolean usoMedicamentos){
+		this.usoMedicamentos = usoMedicamentos;
+	}
+
+	public void setUsoCigarroAlcool(boolean usoCigarroAlcool){
+		this.usoCigarroAlcool = usoCigarroAlcool;
+	}
+
+	public void setPraticaExercicios(boolean praticaExercicios){
+		this.praticaExercicios = praticaExercicios;
+	}
+        
 
 	public void atualizarDataParaAtual(){
 		this.dataModificacao = LocalDateTime.now();

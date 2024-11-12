@@ -1,4 +1,4 @@
-package modelo;
+package interfaces;
 
 import Persistencia.PersistenciaStrategy;
 

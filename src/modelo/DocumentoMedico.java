@@ -1,5 +1,6 @@
 package modelo;
 
+import interfaces.DocumentoEmitivel;
 import java.time.LocalDate;
 import java.util.UUID;
 import Persistencia.PersistenciaStrategy;

@@ -3,7 +3,7 @@ package Persistencia;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import modelo.DocumentoEmitivel;
+import interfaces.DocumentoEmitivel;
 
 /**
  * Classe que implementa a interface PersistenciaStrategy para armazenar e recuperar documentos médicos
