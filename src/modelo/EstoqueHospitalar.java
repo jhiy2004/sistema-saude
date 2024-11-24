@@ -102,4 +102,8 @@ public class EstoqueHospitalar {
         return item != null ? "Quantidade de " + item.getNome() + ": " + item.getQuantidade()
                             : "Item com código " + codigo + " não encontrado no estoque.";
     }
+    
+    public List<ProdutoHospitalar> getItens(){
+        return this.itens;
+    }
 }

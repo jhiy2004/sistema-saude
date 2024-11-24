@@ -4,15 +4,18 @@
  */
 package controlador;
 
+import interfaces.ProdutoHospitalar;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import modelo.Consulta;
+import modelo.EstoqueHospitalar;
 import modelo.Exame;
 import modelo.Hospital;
 import modelo.Medico;
 import modelo.Paciente;
 import modelo.ReceitaMedica;
+import java.util.List;
 
 /**
  *
@@ -82,5 +85,9 @@ public class GerenciaHospitalar {
     
     public boolean cancelarExame(Exame e){
 	return gce.cancelarExame(e);
+    }
+    
+    public List<ProdutoHospitalar> getEstoque(){
+        return hospital.getEstoque();
     }
 }

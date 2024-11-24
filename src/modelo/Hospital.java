@@ -1,6 +1,8 @@
 package modelo;
 
+import interfaces.ProdutoHospitalar;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Hospital {
     private String nome;
@@ -10,6 +12,7 @@ public class Hospital {
     // C. um Diretor para poder acessar o sistema (talvez). diretor herda medico;
     private int limiteEmergencia;
     private int contPacientesEmergencia;
+    private EstoqueHospitalar estoque;
 
     public Hospital(String nome, int limiteEmergencia){
         this.nome = nome;
@@ -80,5 +83,9 @@ public class Hospital {
             return true;
         }
         return false;
+    }
+    
+    public List<ProdutoHospitalar> getEstoque(){
+        return estoque.getItens();
     }
 }
