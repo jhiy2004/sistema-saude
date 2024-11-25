@@ -594,6 +594,7 @@ public class Principal {
                         relatorioMedicamento(medicamento);
                         
                         gh.addMedicamento(medicamento);
+                        return;
                     }else{
                         if(selecionarSimNao("Medicamento não criado por falta de informações, voltar sem salvar?")){
                             System.out.println("Voltando...");
