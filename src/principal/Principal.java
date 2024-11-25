@@ -624,10 +624,10 @@ public class Principal {
                     }
                     break;
                 case 0:
-                    if(!tipoExame.isEmpty() && paciente != null && medico != null){
+                    if(!tipoExame.isEmpty() && paciente != null && medico != null && data != null && horario != null){
                         Exame exame = new Exame(tipoExame, medico, data, horario, paciente);
                         // Erro está aqui
-                        //medico.adicionarExame(exame);
+                        medico.adicionarExame(exame);
                         paciente.addExame(exame);
                         
                         System.out.println("Dados do Exame:");

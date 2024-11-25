@@ -48,6 +48,7 @@ public class Agenda {
             
             horariosDisponiveis.put(data, horariosDoDia);
             consultasAgendadas.put(data, new ArrayList<>());
+            examesAgendados.put(data, new ArrayList<>());
         }
     }
 
