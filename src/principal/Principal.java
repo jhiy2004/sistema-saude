@@ -11,6 +11,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Principal {
     public static Scanner sc = new Scanner(System.in);
@@ -20,8 +21,6 @@ public class Principal {
         
         int indiceMedico = 0;
         int indicePaciente = 0;
-        
-        Paciente paciente;
         
         ArrayList<Medico> medicos = null;
         ArrayList<Paciente> pacientes = null;
@@ -52,6 +51,9 @@ public class Principal {
 
             System.out.println("18 - Gerar relatório de estoque");
             System.out.println("19 - Gerar relatório de departamentos");
+            
+            System.out.println("20 - Internar paciente");
+            
             System.out.println("0 - Sair");
             
             System.out.print("Digite a opção: ");
@@ -75,10 +77,6 @@ public class Principal {
                 case 4:
                     menuConsulta();
                     break;
-                    
-                case 5:
-                    menuMedicamento();
-                    break;
                 
                 case 6:
                     pacientes = gh.getCadastrados();
@@ -93,26 +91,7 @@ public class Principal {
                   
                     gh.removerMedico(medicos.get(indiceMedico));
                     break;
-                         
-                case 8:
-                    Exame e = selecionarExame();
-                    paciente = e.getPaciente();
-                    paciente.removerExame(e);
-                    gh.cancelarExame(e);
-                    break;
-                
-                case 9:
-                    Consulta c = selecionarConsulta();
-                    paciente = c.getPaciente();
-                    paciente.removerConsulta(c);
-                    gh.cancelarConsulta(c);
-                    break;
-                    
-                case 10:
-                    Medicamento m = selecionarMedicamento();
-                    
-                    gh.removerMedicamento(m.getCodigo());
-                    break;
+                            
                     
                 case 11:
                     listarPacientes();
@@ -148,6 +127,13 @@ public class Principal {
                     
                 case 19:
                     gerarRelatorioDepartamentos();
+                    break;
+                
+                case 20:
+                    pacientes = gh.getCadastrados();
+                    indicePaciente = selecionarPaciente(pacientes);
+                    
+                    gh.removerPaciente(pacientes.get(indicePaciente));
                     break;
                     
                 case 0:
@@ -503,7 +489,7 @@ public class Principal {
             
             switch(opc){
                 case 1:
-                    medicamento = selecionarMedicamento();
+                    medicamento = menuMedicamento();
                    break;
                 case 2:
                     System.out.print("Digite a dosagem: ");
@@ -532,7 +518,7 @@ public class Principal {
         }
     }
     
-    public static void menuMedicamento(){
+    public static Medicamento menuMedicamento(){
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
         String nome="", codigo="", fabricante="";
         LocalDate validade = null;
@@ -584,10 +570,11 @@ public class Principal {
                         System.out.println("Dados do medicamento:");
                         relatorioMedicamento(medicamento);
                         
-                        gh.addMedicamento(medicamento);
+                        return medicamento;
                     }else{
                         if(selecionarSimNao("Medicamento não criado por falta de informações, voltar sem salvar?")){
                             System.out.println("Voltando...");
+                            return null;
                         }
                     }
                     break;
@@ -1062,73 +1049,17 @@ public class Principal {
         relatorio.exibirRelatorio(gh.getHospital());
     }
     
-    public static Medicamento selecionarMedicamento(){
+    public static int selecionarMedicamento(){
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
-        ArrayList<Medicamento> medicamentos = gh.getEstoque();
         
         int i = 1;
-        for(Medicamento m : medicamentos){
-            System.out.println(String.format("%d) %s", i, m.getNome()));
-            i++;
+        for(ProdutoHospitalar p : gh.getEstoque()){
+            if(p instanceof Medicamento){
+                System.out.println(String.format("%d) %s", i, p.getNome()));
+            }
         }
-        System.out.print("Digite o número do medicamento desejado: ");
-        i = sc.nextInt();
-        i--;
-        Medicamento medicamento = medicamentos.get(i);
         
-        return medicamento;
-    }
-    
-    public static Consulta selecionarConsulta(){
-        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
-        ArrayList<Medico> medicos = gh.getMedicos();
-        int indiceMedico = selecionarMedico(gh.getMedicos());
-        Medico m = medicos.get(indiceMedico);
-        Agenda a = m.getAgenda();
-        List<Consulta> consultas = a.getTodasConsultasAgendadas();
-        
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        
-        int i=1;
-        for(Consulta c : consultas){
-            System.out.println(String.format("%d) Data: %s Horário: %s", 
-            i, 
-            c.getData().format(dateFormatter), 
-            c.getHorario().format(timeFormatter)));
-            i++;
-        }
-        System.out.print("Digite o número da consulta desejada: ");
-        i = sc.nextInt();
-        i--;
-        
-        return consultas.get(i);
-    }
-    
-    public static Exame selecionarExame(){
-        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
-        ArrayList<Medico> medicos = gh.getMedicos();
-        int indiceMedico = selecionarMedico(gh.getMedicos());
-        Medico m = medicos.get(indiceMedico);
-        Agenda a = m.getAgenda();
-        List<Exame> exames = a.getTodosExamesAgendados();
-        
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        
-        int i=1;
-        for(Exame e : exames){
-            System.out.println(String.format("%d) Data: %s Horário: %s", 
-            i, 
-            e.getData().format(dateFormatter), 
-            e.getHorario().format(timeFormatter)));
-            i++;
-        }
-        System.out.print("Digite o número do exame desejado: ");
-        i = sc.nextInt();
-        i--;
-        
-        return exames.get(i);
+        return 0;
     }
     
     public static LocalDate selecionarDataMedico(Medico medico){
@@ -1292,13 +1223,198 @@ public class Principal {
     public static void seed(){
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
         
-        Paciente p = new Paciente("jose", "cpf", 12, true, "jsdf", "kjadf", "lkjasdf", 12.21, 12.2, "asfdlk", null);
-        Paciente p1 = new Paciente("pedro", "cpf", 12, true, "jsdf", "kjadf", "lkjasdf", 12.21, 12.2, "asfdlk", null);
-        Medico m = new Medico("crm", "especialidade", "vitor", 1000);
-        
-        gh.addMedico(m);
-        gh.addPaciente(p);
+        HistoricoMedico h1 = new HistoricoMedico(
+            "Diabetes na família",
+            "Nenhum medicamento em uso",
+            "Apendicectomia em 2015",
+            "Nenhuma doença prévia",
+            "Hipertensão",
+            false,
+            false,
+            true
+        );
+
+        Paciente p1 = new Paciente(
+            "Carlos Silva",
+            "123.456.789-00",
+            34,
+            true,
+            "Engenheiro",
+            "Rua das Palmeiras, 123",
+            "(11) 98765-4321",
+            78.5,
+            1.75,
+            Constantes.O_MAIS,
+            h1
+        );
+
+        // Paciente 2
+        HistoricoMedico h2 = new HistoricoMedico(
+            "Histórico familiar limpo",
+            "Anti-inflamatórios esporádicos",
+            "Cirurgia no joelho em 2020",
+            "Varicela na infância",
+            "Nenhuma doença crônica",
+            false,
+            true,
+            false
+        );
+
+        Paciente p2 = new Paciente(
+            "Ana Maria Oliveira",
+            "987.654.321-00",
+            28,
+            false,
+            "Professora",
+            "Avenida Central, 456",
+            "(21) 99876-5432",
+            62.0,
+            1.65,
+            Constantes.A_MAIS,
+            h2
+        );
+
+        // Paciente 3
+        HistoricoMedico h3 = new HistoricoMedico(
+            "Câncer de mama na família",
+            "Pílula anticoncepcional",
+            "Nenhuma cirurgia",
+            "Bronquite na infância",
+            "Nenhuma doença crônica",
+            true,
+            false,
+            true
+        );
+
+        Paciente p3 = new Paciente(
+            "Beatriz Santos",
+            "321.654.987-00",
+            42,
+            false,
+            "Designer",
+            "Rua do Sol, 789",
+            "(31) 91234-5678",
+            70.0,
+            1.60,
+            Constantes.B_MAIS,
+            h3
+        );
+
+        // Paciente 4
+        HistoricoMedico h4 = new HistoricoMedico(
+            "Histórico familiar limpo",
+            "Antiácidos e vitaminas",
+            "Cirurgia de hérnia em 2018",
+            "Nenhuma doença prévia",
+            "Diabetes tipo 2",
+            true,
+            false,
+            true
+        );
+
+        Paciente p4 = new Paciente(
+            "João Pedro Almeida",
+            "456.789.123-00",
+            50,
+            true,
+            "Advogado",
+            "Travessa dos Pioneiros, 890",
+            "(41) 92345-6789",
+            85.0,
+            1.80,
+            Constantes.AB_MENOS,
+            h4
+        );
+
+        // Paciente 5
+        HistoricoMedico h5 = new HistoricoMedico(
+            "Histórico de doenças cardíacas na família",
+            "Analgésicos esporádicos",
+            "Cirurgia cardíaca em 2010",
+            "Hipertensão",
+            "Cardiopatia",
+            true,
+            true,
+            false
+        );
+
+        Paciente p5 = new Paciente(
+            "Miguel Costa",
+            "654.321.987-00",
+            60,
+            true,
+            "Aposentado",
+            "Praça das Rosas, 321",
+            "(61) 98765-1234",
+            90.0,
+            1.70,
+            Constantes.O_MENOS,
+            h5
+        );
+
         gh.addPaciente(p1);
+        gh.addPaciente(p2);
+        gh.addPaciente(p3);
+        gh.addPaciente(p4);
+        gh.addPaciente(p5);
+        
+        // Criação dos médicos, um para cada especialidade
+        Medico[] medicos = {
+            new Medico("CRM/SP 123456", Constantes.CARDIOLOGIA, "Dr. Carlos Cardio", 20000.0f),
+            new Medico("CRM/RJ 234567", Constantes.DERMATOLOGIA, "Dra. Daniela Derma", 18000.0f),
+            new Medico("CRM/MG 345678", Constantes.ENDOCRINOLOGIA, "Dr. Eduardo Endócrino", 19000.0f),
+            new Medico("CRM/RS 456789", Constantes.GASTROENTEROLOGIA, "Dr. Gustavo Gastro", 21000.0f),
+            new Medico("CRM/BA 567890", Constantes.GERIATRIA, "Dra. Gabriela Geriatria", 17000.0f),
+            new Medico("CRM/PR 678901", Constantes.GINECOLOGIA, "Dra. Giovana Gineco", 18500.0f),
+            new Medico("CRM/SC 789012", Constantes.NEUROLOGIA, "Dr. Nelson Neuro", 22000.0f),
+            new Medico("CRM/PE 890123", Constantes.OFTALMOLOGIA, "Dra. Olivia Oftalmo", 19000.0f),
+            new Medico("CRM/DF 901234", Constantes.ORTOPEDIA, "Dr. Otávio Ortopedia", 20000.0f),
+            new Medico("CRM/GO 012345", Constantes.PEDIATRIA, "Dra. Paula Pediatria", 18500.0f),
+            new Medico("CRM/CE 112233", Constantes.PSIQUIATRIA, "Dr. Pedro Psiquiatria", 21000.0f),
+            new Medico("CRM/AM 223344", Constantes.UROLOGIA, "Dr. Ubirajara Urologia", 19500.0f),
+        };
+        
+        for(Medico m : medicos){
+            gh.addMedico(m);
+        }
+        
+        Medicamento[] medicamentos = {
+            new Medicamento("Paracetamol", UUID.randomUUID().toString(), LocalDate.of(2025, 5, 10), 50, "Farmacêutica ABC"),
+            new Medicamento("Ibuprofeno", UUID.randomUUID().toString(), LocalDate.of(2026, 3, 15), 30, "Laboratório XYZ"),
+            new Medicamento("Amoxicilina", UUID.randomUUID().toString(), LocalDate.of(2024, 11, 20), 100, "Químicos Nacionais"),
+            new Medicamento("Cetoconazol", UUID.randomUUID().toString(), LocalDate.of(2025, 7, 1), 70, "Medicamentos Beta"),
+            new Medicamento("Captopril", UUID.randomUUID().toString(), LocalDate.of(2025, 2, 8), 40, "Saúde Farma"),
+            new Medicamento("Dipirona", UUID.randomUUID().toString(), LocalDate.of(2024, 12, 5), 90, "Farmacêutica ABC"),
+            new Medicamento("Aspirina", UUID.randomUUID().toString(), LocalDate.of(2026, 1, 18), 60, "Laboratório XYZ"),
+            new Medicamento("Metformina", UUID.randomUUID().toString(), LocalDate.of(2025, 6, 22), 120, "Químicos Nacionais"),
+            new Medicamento("Omeprazol", UUID.randomUUID().toString(), LocalDate.of(2025, 9, 11), 80, "Medicamentos Beta"),
+            new Medicamento("Losartana", UUID.randomUUID().toString(), LocalDate.of(2025, 4, 25), 110, "Saúde Farma"),
+            new Medicamento("Levotiroxina", UUID.randomUUID().toString(), LocalDate.of(2026, 2, 3), 50, "Farmacêutica ABC"),
+            new Medicamento("Atorvastatina", UUID.randomUUID().toString(), LocalDate.of(2024, 10, 27), 35, "Laboratório XYZ"),
+            new Medicamento("Simvastatina", UUID.randomUUID().toString(), LocalDate.of(2025, 8, 30), 95, "Químicos Nacionais"),
+            new Medicamento("Furosemida", UUID.randomUUID().toString(), LocalDate.of(2026, 7, 10), 45, "Medicamentos Beta"),
+            new Medicamento("Cloridrato de Sertralina", UUID.randomUUID().toString(), LocalDate.of(2024, 12, 19), 85, "Saúde Farma"),
+            new Medicamento("Cloridrato de Fluoxetina", UUID.randomUUID().toString(), LocalDate.of(2025, 1, 12), 25, "Farmacêutica ABC"),
+            new Medicamento("Lorazepam", UUID.randomUUID().toString(), LocalDate.of(2025, 3, 9), 75, "Laboratório XYZ"),
+            new Medicamento("Ranitidina", UUID.randomUUID().toString(), LocalDate.of(2025, 5, 18), 95, "Químicos Nacionais"),
+            new Medicamento("Bromoprida", UUID.randomUUID().toString(), LocalDate.of(2025, 10, 5), 65, "Medicamentos Beta"),
+            new Medicamento("Azitromicina", UUID.randomUUID().toString(), LocalDate.of(2026, 4, 21), 55, "Saúde Farma"),
+            new Medicamento("Ciclosporina", UUID.randomUUID().toString(), LocalDate.of(2025, 11, 15), 105, "Farmacêutica ABC"),
+            new Medicamento("Prednisona", UUID.randomUUID().toString(), LocalDate.of(2024, 9, 30), 90, "Laboratório XYZ"),
+            new Medicamento("Hidroxicloroquina", UUID.randomUUID().toString(), LocalDate.of(2025, 2, 20), 60, "Químicos Nacionais"),
+            new Medicamento("Alprazolam", UUID.randomUUID().toString(), LocalDate.of(2025, 8, 25), 35, "Medicamentos Beta"),
+            new Medicamento("Carbamazepina", UUID.randomUUID().toString(), LocalDate.of(2025, 3, 14), 75, "Saúde Farma"),
+            new Medicamento("Lamotrigina", UUID.randomUUID().toString(), LocalDate.of(2026, 6, 17), 95, "Farmacêutica ABC"),
+            new Medicamento("Valproato de Sódio", UUID.randomUUID().toString(), LocalDate.of(2025, 12, 29), 50, "Laboratório XYZ"),
+            new Medicamento("Clonazepam", UUID.randomUUID().toString(), LocalDate.of(2026, 8, 13), 85, "Químicos Nacionais"),
+            new Medicamento("Midazolam", UUID.randomUUID().toString(), LocalDate.of(2024, 11, 22), 45, "Medicamentos Beta"),
+            new Medicamento("Diazepam", UUID.randomUUID().toString(), LocalDate.of(2025, 7, 7), 70, "Saúde Farma")
+        };
+        
+        for(Medicamento m : medicamentos){
+            gh.addMedicamento(m);
+        }
+        
     }
     
     public static void main(String[] args){

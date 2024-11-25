@@ -10,9 +10,7 @@ public class EstoqueMedicamentos {
     }
     
     public void adicionarMedicamento(Medicamento m){
-        if(buscarMedicamentoNome(m.getCodigo()) == null){
-            medicamentos.add(m);
-        }
+        medicamentos.add(m);
     }
     
     public void removerMedicamento(String codigo){
