@@ -4,19 +4,17 @@
  */
 package controlador;
 
-import interfaces.ProdutoHospitalar;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import modelo.Consulta;
-import modelo.EstoqueHospitalar;
 import modelo.Departamento;
 import modelo.Exame;
 import modelo.Hospital;
 import modelo.Medico;
 import modelo.Paciente;
 import modelo.ReceitaMedica;
-import java.util.List;
+import modelo.Medicamento;
 
 /**
  *
@@ -24,7 +22,7 @@ import java.util.List;
  */
 public class GerenciaHospitalar {
     private ArrayList <Paciente> cadastrados;
-    private Hospital hospital; // Ainda nao esta sendo utilizado, mas será
+    private Hospital hospital;
     private GerenciarConsultasExames gce;
     private static GerenciaHospitalar instance;
 
@@ -40,6 +38,10 @@ public class GerenciaHospitalar {
             instance = new GerenciaHospitalar("Hospital", 10);
         }
         return instance;
+    }
+    
+    public Hospital getHospital(){
+        return hospital;
     }
     
     public void addPaciente(Paciente p){
@@ -123,7 +125,7 @@ public class GerenciaHospitalar {
 	return gce.cancelarExame(e);
     }
     
-    public List<ProdutoHospitalar> getEstoque(){
+    public ArrayList<Medicamento> getEstoque(){
         return hospital.getEstoque();
     }
 }
