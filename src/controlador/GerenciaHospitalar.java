@@ -133,4 +133,8 @@ public class GerenciaHospitalar {
     public void removerMedicamento(String codigo){
         hospital.removerMedicamento(codigo);
     }
+    
+    public boolean internarPaciente(Paciente p){
+        return this.hospital.internar(p);
+    }
 }
