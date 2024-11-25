@@ -76,9 +76,6 @@ public class GerenciaHospitalar {
         logger.gravaArquivo(String.format("Médico '%s' removido", m.getNome()), Logger.Level.INFO);
     }
     
-    public Hospital getHospital(){
-        return hospital;
-    }
     public ArrayList<Paciente> getCadastrados() {
         return cadastrados;
     }
@@ -127,5 +124,9 @@ public class GerenciaHospitalar {
     
     public ArrayList<Medicamento> getEstoque(){
         return hospital.getEstoque();
+    }
+    
+    public boolean internarPaciente(Paciente p){
+        return this.hospital.internar(p);
     }
 }
