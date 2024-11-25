@@ -125,4 +125,8 @@ public class GerenciaHospitalar {
     public ArrayList<Medicamento> getEstoque(){
         return hospital.getEstoque();
     }
+    
+    public boolean internarPaciente(Paciente p){
+        return this.hospital.internar(p);
+    }
 }
