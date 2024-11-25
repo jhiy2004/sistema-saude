@@ -16,6 +16,7 @@ public class Principal {
     public static Scanner sc = new Scanner(System.in);
     
     public static void menuPrincipal(){
+        System.out.println("oi");
         int opc = 0;
         
         int indiceMedico = 0;
