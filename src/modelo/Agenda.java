@@ -48,7 +48,9 @@ public class Agenda {
             
             horariosDisponiveis.put(data, horariosDoDia);
             consultasAgendadas.put(data, new ArrayList<>());
+            consultasCanceladas.put(data, new ArrayList<>());
             examesAgendados.put(data, new ArrayList<>());
+            examesCancelados.put(data, new ArrayList<>());
         }
     }
 
@@ -149,7 +151,7 @@ public class Agenda {
             horariosDisponiveis.get(data).add(horario);
             
             // Adiciona o exame aos exames cancelados e seta o status dele
-            examesAgendados.get(data).add(exame);
+            examesCancelados.get(data).add(exame);
             exame.setStatus(Constantes.Status.CANCELADO);
             
             System.out.println("Exame cancelado com sucesso para " + data + " às " + horario + ".");
