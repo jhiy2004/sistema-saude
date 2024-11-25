@@ -19,6 +19,7 @@ public class Hospital {
         this.departamentos = new ArrayList<>();
         this.emergencia = new Paciente[limiteEmergencia];
         this.contPacientesEmergencia = 0;
+        this.estoque = new EstoqueMedicamentos();
     }
 
     public ArrayList<Departamento> getDepartamentos() {
@@ -91,6 +92,14 @@ public class Hospital {
             return true;
         }
         return false;
+    }
+    
+    public void adicionarMedicamento(Medicamento m){
+        estoque.adicionarMedicamento(m);
+    }
+    
+    public void removerMedicamento(String nome){
+        estoque.removerMedicamento(nome);
     }
     
     public ArrayList<Medicamento> getEstoque(){
