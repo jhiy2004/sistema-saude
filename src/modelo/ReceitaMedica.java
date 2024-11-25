@@ -23,9 +23,9 @@ public class ReceitaMedica extends DocumentoMedico {
      * @param medicoResponsavel O médico responsável pela receita.
      * @param observacoes Observações adicionais do médico.
      */
-    public ReceitaMedica(Paciente paciente, Medico medicoResponsavel, String observacoes) {
+    public ReceitaMedica(Paciente paciente, Medico medicoResponsavel, String observacoes, ArrayList<Prescricao> prescricoes) {
         super(paciente, medicoResponsavel);        
-        this.prescricoes = new ArrayList<>(); // Inicializa a lista de prescrições
+        this.prescricoes = prescricoes;
         this.observacoes = observacoes;
     }    
         

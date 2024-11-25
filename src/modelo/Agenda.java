@@ -28,10 +28,10 @@ public class Agenda {
         inicializarHorariosDisponiveis();
     }
 
-    // Inicializa os horários disponíveis para os próximos 30 dias a partir de hoje
+    // Inicializa os horários disponíveis para os próximos 120 dias a partir de hoje
     private void inicializarHorariosDisponiveis() {
         LocalDate hoje = LocalDate.now();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 120; i++) {
             LocalDate data = hoje.plusDays(i);
             List<LocalTime> horariosDoDia = new ArrayList<>();
             
@@ -48,6 +48,7 @@ public class Agenda {
             
             horariosDisponiveis.put(data, horariosDoDia);
             consultasAgendadas.put(data, new ArrayList<>());
+            examesAgendados.put(data, new ArrayList<>());
         }
     }
 
@@ -181,8 +182,26 @@ public class Agenda {
         return consultasAgendadas.getOrDefault(data, Collections.emptyList());
     }
     
+    // Obter todas as consultas agendadas
+    public List<Consulta> getTodasConsultasAgendadas() {
+        List<Consulta> todasConsultas = new ArrayList<>();
+        for (List<Consulta> consultasDoDia : consultasAgendadas.values()) {
+            todasConsultas.addAll(consultasDoDia);
+        }
+        return todasConsultas;
+    }
+    
     // Obter exames agendados para uma data específica
     public List<Exame> getExamesAgendados(LocalDate data) {
         return examesAgendados.getOrDefault(data, Collections.emptyList());
+    }
+    
+    // Obter todos os exames agendados
+    public List<Exame> getTodosExamesAgendados() {
+        List<Exame> todosExames = new ArrayList<>();
+        for (List<Exame> examesDoDia : examesAgendados.values()) {
+            todosExames.addAll(examesDoDia);
+        }
+        return todosExames;
     }
 }

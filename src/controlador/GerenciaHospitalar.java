@@ -14,6 +14,7 @@ import modelo.Hospital;
 import modelo.Medico;
 import modelo.Paciente;
 import modelo.ReceitaMedica;
+import modelo.Medicamento;
 
 /**
  *
@@ -21,7 +22,7 @@ import modelo.ReceitaMedica;
  */
 public class GerenciaHospitalar {
     private ArrayList <Paciente> cadastrados;
-    private Hospital hospital; // Ainda nao esta sendo utilizado, mas será
+    private Hospital hospital;
     private GerenciarConsultasExames gce;
     private static GerenciaHospitalar instance;
 
@@ -37,6 +38,10 @@ public class GerenciaHospitalar {
             instance = new GerenciaHospitalar("Hospital", 10);
         }
         return instance;
+    }
+    
+    public Hospital getHospital(){
+        return hospital;
     }
     
     public void addPaciente(Paciente p){
@@ -118,5 +123,9 @@ public class GerenciaHospitalar {
     
     public boolean cancelarExame(Exame e){
 	return gce.cancelarExame(e);
+    }
+    
+    public ArrayList<Medicamento> getEstoque(){
+        return hospital.getEstoque();
     }
 }

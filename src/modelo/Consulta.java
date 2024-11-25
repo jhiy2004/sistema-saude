@@ -1,6 +1,7 @@
 package modelo;
 
 import constantes.Constantes.Status;
+import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -23,8 +24,8 @@ public class Consulta {
         this.receita = receita;
     }
     
-    public String criarReceitaMedica(String medicamento, String observacoes) {
-        this.receitaMedica = new ReceitaMedica(paciente, medico, observacoes);
+    public String criarReceitaMedica(String medicamento, String observacoes, ArrayList<Prescricao> prescricoes) {
+        this.receitaMedica = new ReceitaMedica(paciente, medico, observacoes, prescricoes);
         return receitaMedica.toString();
     }
 

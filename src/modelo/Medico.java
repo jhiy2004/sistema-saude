@@ -59,6 +59,10 @@ public class Medico {
         this.especialidadeMedica = especialidadeMedica;
     }
     
+    public Agenda getAgenda(){
+        return agenda;
+    }
+    
     // métodos
     public Consulta adicionarConsulta(Consulta c)
     {
