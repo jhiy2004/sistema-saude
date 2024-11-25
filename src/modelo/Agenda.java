@@ -181,8 +181,26 @@ public class Agenda {
         return consultasAgendadas.getOrDefault(data, Collections.emptyList());
     }
     
+    // Obter todas as consultas agendadas
+    public List<Consulta> getTodasConsultasAgendadas() {
+        List<Consulta> todasConsultas = new ArrayList<>();
+        for (List<Consulta> consultasDoDia : consultasAgendadas.values()) {
+            todasConsultas.addAll(consultasDoDia);
+        }
+        return todasConsultas;
+    }
+    
     // Obter exames agendados para uma data específica
     public List<Exame> getExamesAgendados(LocalDate data) {
         return examesAgendados.getOrDefault(data, Collections.emptyList());
+    }
+    
+    // Obter todos os exames agendados
+    public List<Exame> getTodosExamesAgendados() {
+        List<Exame> todosExames = new ArrayList<>();
+        for (List<Exame> examesDoDia : examesAgendados.values()) {
+            todosExames.addAll(examesDoDia);
+        }
+        return todosExames;
     }
 }

@@ -98,6 +98,10 @@ public class Principal {
                 case 12:
                     listarMedicos();
                     break;
+                
+                case 13:
+                    listarExamesMedico();
+                    break;
                     
                 case 17:
                     listarDepartamentos();
@@ -376,6 +380,8 @@ public class Principal {
                 case 0:
                     if(medico != null && paciente != null && receita != null && data != null && horario != null){
                         Consulta consulta = new Consulta(medico.getEspecialidadeMedica(), medico, data, horario, paciente, receita);
+                        medico.adicionarConsulta(consulta);
+                        paciente.addConsulta(consulta);
                         
                         System.out.println("Dados da Consulta:");
                         relatorioConsulta(consulta);
@@ -609,8 +615,12 @@ public class Principal {
                 case 0:
                     if(!tipoExame.isEmpty() && paciente != null && medico != null){
                         Exame exame = new Exame(tipoExame, medico, data, horario, paciente);
+                        medico.adicionarExame(exame);
+                        paciente.addExame(exame);
+                        
                         System.out.println("Dados do Exame:");
                         relatorioExame(exame);
+                        
                         return;
                     }else{
                         if(selecionarSimNao("Exame não criado por falta de informações, voltar sem salvar?")){
@@ -759,6 +769,80 @@ public class Principal {
 
     }
     
+    public static void listarExamesMedico(){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        
+        System.out.println("======= Consultas por médicos =======");
+        for(Medico m : gh.getMedicos()){
+            System.out.println("=====================\n");
+            System.out.println("Nome do médico: " + m.getNome());
+            System.out.println("CRM: " + m.getCrm());
+            Agenda a = m.getAgenda();
+            List<Exame> examesAgendados = a.getTodosExamesAgendados();
+            
+            if(!examesAgendados.isEmpty()){
+                for(Exame e : examesAgendados){
+                    relatorioExame(e);
+                }
+            }else{
+                System.out.println("Não possui exames agendados!");
+            }
+            System.out.println("\n=====================\n");
+        }
+        System.out.println("=====================================");
+    }
+    
+    public static void relatorioExame(Exame exame){
+        System.out.println("Médico responsável:");
+        relatorioMedico(exame.getMedico());
+        System.out.println("Paciente do exame:");
+        relatorioPaciente(exame.getPaciente());
+        System.out.println("Tipo de exame:");
+        System.out.println(exame.getTipoExame());
+        System.out.println("Data do exame:");
+        System.out.println(exame.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        System.out.println("Horário do exame:");
+        System.out.println(exame.getHorario().format(DateTimeFormatter.ofPattern("HH:mm")));
+    }
+    
+    public static void relatorioConsulta(Consulta consulta){
+        System.out.println("Médico responsável:");
+        relatorioMedico(consulta.getMedico());
+        System.out.println("Paciente da consulta:");
+        relatorioPaciente(consulta.getPaciente());
+        System.out.println("Receita medica:");
+        relatorioReceita(consulta.getReceita());
+        System.out.println("Data da consulta:");
+        System.out.println(consulta.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        System.out.println("Horário da consulta:");
+        System.out.println(consulta.getHorario().format(DateTimeFormatter.ofPattern("HH:mm")));
+    }
+    
+    public static void relatorioReceita(ReceitaMedica receita){
+        System.out.println("Observações: " + receita.getObservacoes());
+        System.out.println("Prescrições:");
+        if(receita.getPrescricoes() != null){
+            for(Prescricao p : receita.getPrescricoes()){
+                relatorioPrescricao(p);
+            }
+        }else{
+            System.out.println("Não existem prescrições cadastradas");
+        }
+    }
+    
+    public static void relatorioPrescricao(Prescricao prescricao){
+        System.out.println("Medicamento:");
+        relatorioMedicamento(prescricao.getMedicamento());
+        System.out.println("Dosagem: " + prescricao.getDosagem());
+        System.out.println("Instruções: " + prescricao.getInstrucoes());
+    }
+    
+    public static void relatorioMedicamento(Medicamento medicamento){
+        System.out.println("Nome: " + medicamento.getNome());
+        System.out.println("Código: " + medicamento.getCodigo());
+        System.out.println("Fabricante: " + medicamento.getFabricante());
+    }
+    
     public static void relatorioDepartamento(Departamento d){
         if(d == null){
             System.out.println("Departamento ainda não foi criado");
@@ -861,6 +945,19 @@ public class Principal {
         }
         
         System.out.println("====================================");
+    }
+    
+    public static int selecionarMedicamento(){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        
+        int i = 1;
+        for(ProdutoHospitalar p : gh.getEstoque()){
+            if(p instanceof Medicamento){
+                System.out.println(String.format("%d) %s", i, p.getNome()));
+            }
+        }
+        
+        return 0;
     }
     
     public static LocalDate selecionarDataMedico(Medico medico){
@@ -1019,70 +1116,6 @@ public class Principal {
         
         opc--;
         return opc;
-    }
-    
-    public static int selecionarMedicamento(){
-        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
-        
-        int i = 1;
-        for(ProdutoHospitalar p : gh.getEstoque()){
-            if(p instanceof Medicamento){
-                System.out.println(String.format("%d) %s", i, p.getNome()));
-            }
-        }
-        
-        return 0;
-    }
-    
-    public static void relatorioExame(Exame exame){
-        System.out.println("Médico responsável:");
-        relatorioMedico(exame.getMedico());
-        System.out.println("Paciente do exame:");
-        relatorioPaciente(exame.getPaciente());
-        System.out.println("Tipo de exame:");
-        System.out.println(exame.getTipoExame());
-        System.out.println("Data do exame:");
-        System.out.println(exame.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        System.out.println("Horário do exame:");
-        System.out.println(exame.getHorario().format(DateTimeFormatter.ofPattern("HH:mm")));
-    }
-    
-    public static void relatorioConsulta(Consulta consulta){
-        System.out.println("Médico responsável:");
-        relatorioMedico(consulta.getMedico());
-        System.out.println("Paciente da consulta:");
-        relatorioPaciente(consulta.getPaciente());
-        System.out.println("Receita medica:");
-        relatorioReceita(consulta.getReceita());
-        System.out.println("Data da consulta:");
-        System.out.println(consulta.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        System.out.println("Horário da consulta:");
-        System.out.println(consulta.getHorario().format(DateTimeFormatter.ofPattern("HH:mm")));
-    }
-    
-    public static void relatorioReceita(ReceitaMedica receita){
-        System.out.println("Observações: " + receita.getObservacoes());
-        System.out.println("Prescrições:");
-        if(receita.getPrescricoes() != null){
-            for(Prescricao p : receita.getPrescricoes()){
-                relatorioPrescricao(p);
-            }
-        }else{
-            System.out.println("Não existem prescrições cadastradas");
-        }
-    }
-    
-    public static void relatorioPrescricao(Prescricao prescricao){
-        System.out.println("Medicamento:");
-        relatorioMedicamento(prescricao.getMedicamento());
-        System.out.println("Dosagem: " + prescricao.getDosagem());
-        System.out.println("Instruções: " + prescricao.getInstrucoes());
-    }
-    
-    public static void relatorioMedicamento(Medicamento medicamento){
-        System.out.println("Nome: " + medicamento.getNome());
-        System.out.println("Código: " + medicamento.getCodigo());
-        System.out.println("Fabricante: " + medicamento.getFabricante());
     }
     
     public static void seed(){
