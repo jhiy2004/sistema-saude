@@ -309,15 +309,6 @@ public class Principal {
         System.out.println("========= Departamento =========");
         System.out.println("1 - Nome");
         System.out.println("2 - Codigo");
-
-    public static void menuMedicamento(){
-        System.out.println("========= Medicamento =========");
-        System.out.println("1 - Nome");
-        System.out.println("2 - Codigo");
-        System.out.println("3 - Data validade");
-        System.out.println("4 - Quantidade");
-        System.out.println("5 - Fabricante");
-        System.out.println("0 - Voltar para menu principal");
     }
     
     public static void menuConsulta(){
@@ -392,7 +383,7 @@ public class Principal {
             
             switch(opc){
                 case 1:
-                    Prescricao prescricao = menuPrecricao();
+                    Prescricao prescricao = menuPrescricao();
                     prescricoes.add(prescricao);
                     break;
                 case 2:
@@ -417,7 +408,7 @@ public class Principal {
         }
     }
     
-    public static Prescricao menuPrecricao(){
+    public static Prescricao menuPrescricao(){
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
         Medicamento medicamento = null;
         String dosagem = "";
@@ -439,14 +430,14 @@ public class Principal {
                     medicamento = menuMedicamento();
                    break;
                 case 2:
-                    System.out.print("Digite a dosagem : ");
+                    System.out.print("Digite a dosagem: ");
                     dosagem = sc.nextLine();
                     break;
                 case 3:
-                    System.out.print("Digite as instruções:");
+                    System.out.print("Digite as instruções: ");
                     instrucoes = sc.nextLine();
                     break;
-                case 4:
+                case 0:
                     if(medicamento != null){
                         Prescricao prescricao = new Prescricao(medicamento, dosagem, instrucoes);
                         System.out.println("Dados da prescrição:");
@@ -458,6 +449,7 @@ public class Principal {
                             return null;
                         }
                     }
+                    break;
                 default:
                     System.out.println("Escolha uma opção válida");
             }
@@ -486,11 +478,11 @@ public class Principal {
             
             switch(opc){
                 case 1:
-                    System.out.println("Digite o nome: ");
+                    System.out.print("Digite o nome: ");
                     nome = sc.nextLine();
                     break;
                 case 2:
-                    System.out.println("Digite o código: ");
+                    System.out.print("Digite o código: ");
                     codigo = sc.nextLine();
                     break;
                 case 3:
@@ -502,11 +494,11 @@ public class Principal {
                         System.out.println("Data inválida. Por favor, use o formato dd/MM/yyyy.");
                     }
                 case 4:
-                    System.out.println("Digite a quantidade: ");
+                    System.out.print("Digite a quantidade: ");
                     quantidade = sc.nextInt();
                     break;
                 case 5:
-                    System.out.println("Digite o fabricante: ");
+                    System.out.print("Digite o fabricante: ");
                     fabricante = sc.nextLine();
                     break;
                 case 0:
@@ -933,6 +925,7 @@ public class Principal {
         Paciente p = new Paciente("jose", "cpf", 12, true, "jsdf", "kjadf", "lkjasdf", 12.21, 12.2, "asfdlk", null);
         Medico m = new Medico("crm", "especialidade", "vitor", 1000);
         
+        gh.addMedico(m);
         gh.addPaciente(p);
     }
     
