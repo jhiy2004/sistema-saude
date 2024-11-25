@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Principal {
@@ -315,12 +316,16 @@ public class Principal {
         Paciente paciente = null;
         Medico medico = null;
         ReceitaMedica receita = null;
+        LocalDate data = null;
+        LocalTime horario = null;
         
         while(true){
             System.out.println("========= Consulta =========");
             System.out.println("1 - Escolher paciente");
             System.out.println("2 - Escolher médico");
             System.out.println("3 - Criar receita");
+            System.out.println("4 - Escolher data");
+            System.out.println("5 - Escolher horário");
             System.out.println("0 - Voltar para menu principal");
             System.out.print("Digite a opção: ");
             opc = sc.nextInt();
@@ -341,13 +346,26 @@ public class Principal {
                     if(paciente != null && medico != null && receita == null){
                         menuReceita(paciente, medico);
                     }else{
-                        System.out.println("Impossível criar Receita");
+                        System.out.println("Impossível criar a Receita");
+                    }
+                    break;
+                case 4:
+                    if(medico != null){
+                        data = selecionarDataMedico(medico);
+                    }else{
+                        System.out.println("Selecione o médico antes!");
+                    }
+                    break;
+                case 5:
+                    if(data != null){
+                        horario = selecionarHorarioMedico(medico, data);
+                    }else{
+                        System.out.println("Selecione a data antes!");
                     }
                     break;
                 case 0:
-                    if(medico != null && paciente != null && receita != null){
-                        // MODIFICAR O DATE E TIME
-                        Consulta consulta = new Consulta(medico.getEspecialidadeMedica(), medico, LocalDate.MAX, LocalTime.MIN, paciente, receita);
+                    if(medico != null && paciente != null && receita != null && data != null && horario != null){
+                        Consulta consulta = new Consulta(medico.getEspecialidadeMedica(), medico, data, horario, paciente, receita);
                         
                         System.out.println("Dados da Consulta:");
                         relatorioConsulta(consulta);
@@ -534,12 +552,16 @@ public class Principal {
         Paciente paciente = null;
         Medico medico = null;
         String tipoExame = "";
+        LocalDate data = null;
+        LocalTime horario = null;
         
         while(true){
             System.out.println("========= Exame =========");
             System.out.println("1 - Escolher paciente");
             System.out.println("2 - Escolher médico");
             System.out.println("3 - Tipo exame");
+            System.out.println("4 - Escolher data");
+            System.out.println("5 - Escolher horário");
             System.out.println("0 - Voltar para menu principal");
             System.out.print("Digite a opção: ");
             opc = sc.nextInt();
@@ -560,10 +582,23 @@ public class Principal {
                     System.out.print("Digite o tipo de exame: ");
                     tipoExame = sc.nextLine();
                     break;
+                case 4:
+                    if(medico != null){
+                        data = selecionarDataMedico(medico);
+                    }else{
+                        System.out.println("Selecione o médico antes!");
+                    }
+                    break;
+                case 5:
+                    if(data != null){
+                        horario = selecionarHorarioMedico(medico, data);
+                    }else{
+                        System.out.println("Selecione a data antes!");
+                    }
+                    break;
                 case 0:
                     if(!tipoExame.isEmpty() && paciente != null && medico != null){
-                        // Modificar o LocalDate
-                        Exame exame = new Exame(tipoExame, medico, LocalDate.MAX, LocalTime.MIN, paciente);
+                        Exame exame = new Exame(tipoExame, medico, data, horario, paciente);
                         System.out.println("Dados do Exame:");
                         relatorioExame(exame);
                         return;
@@ -816,6 +851,57 @@ public class Principal {
         }
         
         System.out.println("====================================");
+    }
+    
+    public static LocalDate selecionarDataMedico(Medico medico){
+        Agenda agenda = medico.getAgenda();
+        LocalDate data;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        while(true){
+            System.out.print("Digite a data desejada (dd/MM/yyyy): ");
+            String dataStr = sc.nextLine();
+            
+            try {
+                data = LocalDate.parse(dataStr, formatter);
+                List<LocalTime> horariosDisponiveis = agenda.getHorariosDisponiveis(data);
+                
+                if(horariosDisponiveis.isEmpty()){
+                    System.out.println("Não há horários disponíveis para essa data. Tente outra.");
+                }else{
+                    return data;
+                }
+                
+            } catch (DateTimeParseException e) {
+                System.out.println("Data inválida. Por favor, use o formato dd/MM/yyyy.");
+            }
+        }
+    }
+    
+    public static LocalTime selecionarHorarioMedico(Medico medico, LocalDate data){
+        Agenda agenda = medico.getAgenda();
+        List<LocalTime> horariosDisponiveis = agenda.getHorariosDisponiveis(data);
+        int opc;
+        
+        if (horariosDisponiveis.isEmpty()) {
+            System.out.println("Não há horários disponíveis para esta data.");
+            return null;
+        }
+        
+        System.out.println("Horários disponíveis para " + data + ":");
+        for (int i = 0; i < horariosDisponiveis.size(); i++) {
+            System.out.println((i + 1) + ") " + horariosDisponiveis.get(i));
+        }
+        
+        System.out.print("Selecione um horário pelo número: ");
+        opc = sc.nextInt();
+        
+        if (opc < 1 || opc > horariosDisponiveis.size()) {
+            System.out.println("Opção inválida.");
+            return null;
+        }
+        
+        return horariosDisponiveis.get(opc - 1);
     }
     
     public static boolean selecionarSimNao(String pergunta){

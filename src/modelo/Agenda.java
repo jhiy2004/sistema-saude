@@ -28,10 +28,10 @@ public class Agenda {
         inicializarHorariosDisponiveis();
     }
 
-    // Inicializa os horários disponíveis para os próximos 30 dias a partir de hoje
+    // Inicializa os horários disponíveis para os próximos 120 dias a partir de hoje
     private void inicializarHorariosDisponiveis() {
         LocalDate hoje = LocalDate.now();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 120; i++) {
             LocalDate data = hoje.plusDays(i);
             List<LocalTime> horariosDoDia = new ArrayList<>();
             
