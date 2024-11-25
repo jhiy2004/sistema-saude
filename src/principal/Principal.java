@@ -3,8 +3,11 @@ package principal;
 import constantes.Constantes;
 import modelo.*;
 import controlador.*;
+import interfaces.ProdutoHospitalar;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -57,9 +60,13 @@ public class Principal {
                 case 1:
                     menuPaciente();
                     break;
-                    
+                
                 case 2:
                     menuMedico();
+                    break;
+                
+                case 4:
+                    menuConsulta();
                     break;
                 
                 case 6:
@@ -298,6 +305,11 @@ public class Principal {
         }while(opc != 0);
     }
     
+    public static void menuDepartamento(){
+        System.out.println("========= Departamento =========");
+        System.out.println("1 - Nome");
+        System.out.println("2 - Codigo");
+
     public static void menuMedicamento(){
         System.out.println("========= Medicamento =========");
         System.out.println("1 - Nome");
@@ -313,7 +325,7 @@ public class Principal {
         int opc;
         Paciente paciente = null;
         Medico medico = null;
-        String observacoes;
+        String observacoes = null;
         ReceitaMedica receita = null;
         
         while(true){
@@ -324,6 +336,7 @@ public class Principal {
             System.out.println("0 - Voltar para menu principal");
             System.out.print("Digite a opção: ");
             opc = sc.nextInt();
+            sc.nextLine();
             
             switch(opc){
                 case 1:
@@ -338,55 +351,180 @@ public class Principal {
                     break;
                 case 3:
                     if(paciente != null && medico != null && receita == null){
-                        System.out.print("Digite as observações da receita: ");
-                        observacoes = sc.nextLine();
-                        receita = new ReceitaMedica(paciente, medico, observacoes);
-                        System.out.println("Receita criada com sucesso!");
-                        System.out.print("Pressione Enter para continuar...");
-                        sc.nextLine();
+                        menuReceita(paciente, medico);
                     }else{
                         System.out.println("Impossível criar Receita");
-                        System.out.print("Pressione Enter para continuar...");
-                        sc.nextLine();
                     }
                     break;
                 case 0:
-                    if(paciente != null && medico != null && receita != null){
+                    if(medico != null && paciente != null && receita != null){
                         // MODIFICAR O DATE E TIME
                         Consulta consulta = new Consulta(medico.getEspecialidadeMedica(), medico, LocalDate.MAX, LocalTime.MIN, paciente, receita);
                         System.out.println("Dados da Consulta:");
                         relatorioConsulta(consulta);
-                        System.out.print("Pressione Enter para continuar...");
-                        sc.nextLine();
-                        return;
+                        // Salvar a consulta
                     }else{
-                        System.out.println("Existem dados faltantes para criar a receita!");
-                        System.out.print("Pressione Enter para continuar...");
-                        sc.nextLine();
+                        System.out.println("Voltando sem criar a Receita por informações imcompletas");
+                        return;
                     }
                     break;
                 default:
                     System.out.println("Digite uma opção válida!");
-                    System.out.print("Pressione Enter para continuar...");
-                    sc.nextLine();
                     break;
             }
         }
     }
     
     public static void menuReceita(Paciente p, Medico m){
-        System.out.println("========= Receita médica =========");
-        System.out.println("1 - Adicionar prescrições");
-        System.out.println("2 - Observações");
-        System.out.println("0 - Voltar para menu principal");
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        ArrayList<Prescricao> prescricoes = new ArrayList<>();
+        String observacao = null;
+        int opc;
+        
+        while(true){
+            System.out.println("========= Receita médica =========");
+            System.out.println("1 - Adicionar prescrições");
+            System.out.println("2 - Observações");
+            System.out.println("0 - Voltar para menu principal");
+            System.out.print("Digite a opção: ");
+            opc = sc.nextInt();
+            sc.nextLine();
+            
+            switch(opc){
+                case 1:
+                    Prescricao prescricao = menuPrecricao();
+                    prescricoes.add(prescricao);
+                    break;
+                case 2:
+                    System.out.print("Digite a observação da receita: ");
+                    observacao = sc.nextLine();
+                    break;
+                case 0:
+                    if(prescricoes != null && observacao != null){
+                        ReceitaMedica receita = new ReceitaMedica(p, m, observacao, prescricoes);
+                        
+                        System.out.println("Dados da receita:");
+                        relatorioReceita(receita);
+                        
+                        return;
+                    }else{
+                        System.out.println("Faltam elementos da receita a serem preenchidos");
+                    }
+                    break;
+                default:
+                    System.out.println("Escolha uma opção válida");
+            }
+        }
     }
     
-    public static void menuPrecricao(){
-        System.out.println("========= Precição =========");
-        System.out.println("1 - Medicamento");
-        System.out.println("2 - Dosagem");
-        System.out.println("3 - Instruções");
-        System.out.println("0 - Voltar para menu principal");
+    public static Prescricao menuPrecricao(){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        Medicamento medicamento = null;
+        String dosagem = "";
+        String instrucoes = "";
+        int opc;
+        
+        while(true){
+            System.out.println("========= Prescrição =========");
+            System.out.println("1 - Medicamento");
+            System.out.println("2 - Dosagem");
+            System.out.println("3 - Instruções");
+            System.out.println("0 - Voltar para menu principal");
+            System.out.print("Digite a opção: ");
+            opc = sc.nextInt();
+            sc.nextLine();
+            
+            switch(opc){
+                case 1:
+                    medicamento = menuMedicamento();
+                   break;
+                case 2:
+                    System.out.print("Digite a dosagem : ");
+                    dosagem = sc.nextLine();
+                    break;
+                case 3:
+                    System.out.print("Digite as instruções:");
+                    instrucoes = sc.nextLine();
+                    break;
+                case 4:
+                    if(medicamento != null){
+                        Prescricao prescricao = new Prescricao(medicamento, dosagem, instrucoes);
+                        System.out.println("Dados da prescrição:");
+                        relatorioPrescricao(prescricao);
+                        return prescricao;
+                    }else{
+                        if(selecionarSimNao("Prescrição não criada por falta de informações, voltar assim mesmo?")){
+                            System.out.println("Voltando...");
+                            return null;
+                        }
+                    }
+                default:
+                    System.out.println("Escolha uma opção válida");
+            }
+        }
+    }
+    
+    public static Medicamento menuMedicamento(){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        String nome="", codigo="", fabricante="";
+        LocalDate validade = null;
+        int quantidade=0;
+        int opc;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        while(true){
+            System.out.println("========= Medicamento =========");
+            System.out.println("1 - Nome");
+            System.out.println("2 - Codigo");
+            System.out.println("3 - Data validade");
+            System.out.println("4 - Quantidade");
+            System.out.println("5 - Fabricante");
+            System.out.println("0 - Voltar para menu principal");
+            System.out.print("Digite a opção: ");
+            opc = sc.nextInt();
+            sc.nextLine();
+            
+            switch(opc){
+                case 1:
+                    System.out.println("Digite o nome: ");
+                    nome = sc.nextLine();
+                    break;
+                case 2:
+                    System.out.println("Digite o código: ");
+                    codigo = sc.nextLine();
+                    break;
+                case 3:
+                    System.out.print("Digite a data de validade (dd/MM/yyyy): ");
+                    String dataValidade = sc.nextLine();
+                    try {
+                        validade = LocalDate.parse(dataValidade, formatter);
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Data inválida. Por favor, use o formato dd/MM/yyyy.");
+                    }
+                case 4:
+                    System.out.println("Digite a quantidade: ");
+                    quantidade = sc.nextInt();
+                    break;
+                case 5:
+                    System.out.println("Digite o fabricante: ");
+                    fabricante = sc.nextLine();
+                    break;
+                case 0:
+                    if(nome != "" && codigo != "" && validade != null && quantidade > 0 && fabricante != ""){
+                        Medicamento medicamento = new Medicamento(nome, codigo, validade, quantidade, fabricante);
+                        // Relatorio do medicamento é feito no relatorio da prescrição
+                        return medicamento;
+                    }else{
+                        if(selecionarSimNao("Medicamento não criado por falta de informações, voltar assim mesmo?")){
+                            System.out.println("Voltando...");
+                            return null;
+                        }
+                    }
+                    break;
+                default:
+                    System.out.println("Escolha uma opção válida");
+            }
+        }
     }
     
     public static void menuExame(){
@@ -742,6 +880,19 @@ public class Principal {
         return opc;
     }
     
+    public static int selecionarMedicamento(){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        
+        int i = 1;
+        for(ProdutoHospitalar p : gh.getEstoque()){
+            if(p instanceof Medicamento){
+                System.out.println(String.format("%d) %s", i, p.getNome()));
+            }
+        }
+        
+        return 0;
+    }
+    
     public static void relatorioConsulta(Consulta consulta){
         System.out.println("Médico responsável:");
         relatorioMedico(consulta.getMedico());
@@ -780,11 +931,13 @@ public class Principal {
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
         
         Paciente p = new Paciente("jose", "cpf", 12, true, "jsdf", "kjadf", "lkjasdf", 12.21, 12.2, "asfdlk", null);
+        Medico m = new Medico("crm", "especialidade", "vitor", 1000);
         
         gh.addPaciente(p);
     }
     
     public static void main(String[] args){
+        seed();
         menuPrincipal();
     }
 }
