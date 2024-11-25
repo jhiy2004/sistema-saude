@@ -117,6 +117,14 @@ public class Principal {
                     listarDepartamentos();
                     break;
                     
+                case 18:
+                    gerarRelatorioEstoque();
+                    break;
+                    
+                case 19:
+                    gerarRelatorioDepartamentos();
+                    break;
+                    
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -1014,6 +1022,20 @@ public class Principal {
         }
         
         System.out.println("====================================");
+    }
+    
+    public static void gerarRelatorioEstoque(){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        RelatorioMedicamentos relatorio = new RelatorioMedicamentos();
+        
+        relatorio.exibirRelatorio(gh.getHospital());
+    }
+    
+    public static void gerarRelatorioDepartamentos(){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        RelatorioDepartamentos relatorio = new RelatorioDepartamentos();
+        
+        relatorio.exibirRelatorio(gh.getHospital());
     }
     
     public static int selecionarMedicamento(){
