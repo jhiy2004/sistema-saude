@@ -38,7 +38,7 @@ public class Paciente{
 	}
 
 	public String getNome(){
-		return this.nome;
+            return this.nome;
 	}
         
         public String getCPF(){
@@ -46,15 +46,15 @@ public class Paciente{
         }
 
 	public int getIdade(){
-		return this.idade;
+            return this.idade;
 	}
 
 	public boolean getSexo(){
-		return this.sexo;
+            return this.sexo;
 	}
 
 	public String getProfissao(){
-		return this.profissao;
+            return this.profissao;
 	}
 
 	public String getEndereco(){
@@ -80,8 +80,6 @@ public class Paciente{
         public HistoricoMedico getHistoricoMedico(){
             return this.historicoMedico;
         }
-
-
 
 	public ArrayList<Consulta> getConsultas(){
 		return this.consultas;
@@ -130,7 +128,16 @@ public class Paciente{
 	public void setTipoSanguineo(String tipoSanguineo){
 		this.tipoSanguineo = tipoSanguineo;
 	}
+        
         public void setHistoricoMedico(HistoricoMedico historicoMedico){
             this.historicoMedico = historicoMedico;
+        }
+        
+        public void addConsulta(Consulta c){
+            consultas.add(c);
+        }
+        
+        public void addExame(Exame e){
+            exames.add(e);
         }
 }
