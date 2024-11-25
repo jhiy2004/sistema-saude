@@ -101,6 +101,18 @@ public class Principal {
                     listarExamesMedico();
                     break;
                     
+                case 14:
+                    listarExamesPaciente();
+                    break;
+                
+                case 15:
+                    listarConsultasMedico();
+                    break;
+                
+                case 16:
+                    listarConsultasPaciente();
+                    break;
+                    
                 case 17:
                     listarDepartamentos();
                     break;
@@ -370,7 +382,8 @@ public class Principal {
                 case 0:
                     if(medico != null && paciente != null && receita != null && data != null && horario != null){
                         Consulta consulta = new Consulta(medico.getEspecialidadeMedica(), medico, data, horario, paciente, receita);
-                        medico.adicionarConsulta(consulta);
+                        // Aqui está o erro
+                        //medico.adicionarConsulta(consulta);
                         paciente.addConsulta(consulta);
                         
                         System.out.println("Dados da Consulta:");
@@ -605,7 +618,8 @@ public class Principal {
                 case 0:
                     if(!tipoExame.isEmpty() && paciente != null && medico != null){
                         Exame exame = new Exame(tipoExame, medico, data, horario, paciente);
-                        medico.adicionarExame(exame);
+                        // Erro está aqui
+                        //medico.adicionarExame(exame);
                         paciente.addExame(exame);
                         
                         System.out.println("Dados do Exame:");
@@ -762,7 +776,7 @@ public class Principal {
     public static void listarExamesMedico(){
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
         
-        System.out.println("======= Consultas por médicos =======");
+        System.out.println("======= Exames por médicos =======");
         for(Medico m : gh.getMedicos()){
             System.out.println("=====================\n");
             System.out.println("Nome do médico: " + m.getNome());
@@ -776,6 +790,71 @@ public class Principal {
                 }
             }else{
                 System.out.println("Não possui exames agendados!");
+            }
+            System.out.println("\n=====================\n");
+        }
+        System.out.println("=====================================");
+    }
+    
+    public static void listarExamesPaciente(){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        
+        System.out.println("======= Exames por pacientes =======");
+        for(Paciente p : gh.getCadastrados()){
+            System.out.println("=====================\n");
+            System.out.println("Nome do paciente: " + p.getNome());
+            List<Exame> examesAgendados = p.getExames();
+            
+            if(!examesAgendados.isEmpty()){
+                for(Exame e : examesAgendados){
+                    relatorioExame(e);
+                }
+            }else{
+                System.out.println("Não possui exames agendados!");
+            }
+            System.out.println("\n=====================\n");
+        }
+        System.out.println("=====================================");
+    }
+    
+    public static void listarConsultasMedico(){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        
+        System.out.println("======= Consultas por médicos =======");
+        for(Medico m : gh.getMedicos()){
+            System.out.println("=====================\n");
+            System.out.println("Nome do médico: " + m.getNome());
+            System.out.println("CRM: " + m.getCrm());
+            Agenda a = m.getAgenda();
+            List<Consulta> consultasAgendadas = a.getTodasConsultasAgendadas();
+            
+            if(!consultasAgendadas.isEmpty()){
+                for(Consulta c : consultasAgendadas){
+                    relatorioConsulta(c);
+                }
+            }else{
+                System.out.println("Não possui consultas agendadas!");
+            }
+            System.out.println("\n=====================\n");
+        }
+        System.out.println("=====================================");
+    }
+    
+    public static void listarConsultasPaciente(){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        
+        System.out.println("======= Consultas por pacientes =======");
+        for(Paciente p : gh.getCadastrados()){
+            System.out.println("=====================\n");
+            System.out.println("Nome do paciente: " + p.getNome());
+            List<Consulta> consultasAgendadas = p.getConsultas();
+            
+            if(!consultasAgendadas.isEmpty()){
+                for(Consulta c : consultasAgendadas){
+                    relatorioConsulta(c);
+                }
+            }else{
+                System.out.println("Não possui consultas agendadas!");
             }
             System.out.println("\n=====================\n");
         }
@@ -1112,10 +1191,12 @@ public class Principal {
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
         
         Paciente p = new Paciente("jose", "cpf", 12, true, "jsdf", "kjadf", "lkjasdf", 12.21, 12.2, "asfdlk", null);
+        Paciente p1 = new Paciente("pedro", "cpf", 12, true, "jsdf", "kjadf", "lkjasdf", 12.21, 12.2, "asfdlk", null);
         Medico m = new Medico("crm", "especialidade", "vitor", 1000);
         
         gh.addMedico(m);
         gh.addPaciente(p);
+        gh.addPaciente(p1);
     }
     
     public static void main(String[] args){
