@@ -11,6 +11,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Principal {
     public static Scanner sc = new Scanner(System.in);
@@ -20,8 +21,6 @@ public class Principal {
         
         int indiceMedico = 0;
         int indicePaciente = 0;
-        
-        Paciente paciente;
         
         ArrayList<Medico> medicos = null;
         ArrayList<Paciente> pacientes = null;
@@ -78,10 +77,6 @@ public class Principal {
                 case 4:
                     menuConsulta();
                     break;
-                    
-                case 5:
-                    menuMedicamento();
-                    break;
                 
                 case 6:
                     pacientes = gh.getCadastrados();
@@ -96,26 +91,7 @@ public class Principal {
                   
                     gh.removerMedico(medicos.get(indiceMedico));
                     break;
-                         
-                case 8:
-                    Exame e = selecionarExame();
-                    paciente = e.getPaciente();
-                    paciente.removerExame(e);
-                    gh.cancelarExame(e);
-                    break;
-                
-                case 9:
-                    Consulta c = selecionarConsulta();
-                    paciente = c.getPaciente();
-                    paciente.removerConsulta(c);
-                    gh.cancelarConsulta(c);
-                    break;
-                    
-                case 10:
-                    Medicamento m = selecionarMedicamento();
-                    
-                    gh.removerMedicamento(m.getCodigo());
-                    break;
+                            
                     
                 case 11:
                     listarPacientes();
@@ -151,6 +127,13 @@ public class Principal {
                     
                 case 19:
                     gerarRelatorioDepartamentos();
+                    break;
+                
+                case 20:
+                    pacientes = gh.getCadastrados();
+                    indicePaciente = selecionarPaciente(pacientes);
+                    
+                    gh.removerPaciente(pacientes.get(indicePaciente));
                     break;
                     
                 case 20:
@@ -513,7 +496,7 @@ public class Principal {
             
             switch(opc){
                 case 1:
-                    medicamento = selecionarMedicamento();
+                    medicamento = menuMedicamento();
                    break;
                 case 2:
                     System.out.print("Digite a dosagem: ");
@@ -542,7 +525,7 @@ public class Principal {
         }
     }
     
-    public static void menuMedicamento(){
+    public static Medicamento menuMedicamento(){
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
         String nome="", codigo="", fabricante="";
         LocalDate validade = null;
@@ -594,10 +577,11 @@ public class Principal {
                         System.out.println("Dados do medicamento:");
                         relatorioMedicamento(medicamento);
                         
-                        gh.addMedicamento(medicamento);
+                        return medicamento;
                     }else{
                         if(selecionarSimNao("Medicamento não criado por falta de informações, voltar sem salvar?")){
                             System.out.println("Voltando...");
+                            return null;
                         }
                     }
                     break;
@@ -1072,73 +1056,17 @@ public class Principal {
         relatorio.exibirRelatorio(gh.getHospital());
     }
     
-    public static Medicamento selecionarMedicamento(){
+    public static int selecionarMedicamento(){
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
-        ArrayList<Medicamento> medicamentos = gh.getEstoque();
         
         int i = 1;
-        for(Medicamento m : medicamentos){
-            System.out.println(String.format("%d) %s", i, m.getNome()));
-            i++;
+        for(ProdutoHospitalar p : gh.getEstoque()){
+            if(p instanceof Medicamento){
+                System.out.println(String.format("%d) %s", i, p.getNome()));
+            }
         }
-        System.out.print("Digite o número do medicamento desejado: ");
-        i = sc.nextInt();
-        i--;
-        Medicamento medicamento = medicamentos.get(i);
         
-        return medicamento;
-    }
-    
-    public static Consulta selecionarConsulta(){
-        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
-        ArrayList<Medico> medicos = gh.getMedicos();
-        int indiceMedico = selecionarMedico(gh.getMedicos());
-        Medico m = medicos.get(indiceMedico);
-        Agenda a = m.getAgenda();
-        List<Consulta> consultas = a.getTodasConsultasAgendadas();
-        
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        
-        int i=1;
-        for(Consulta c : consultas){
-            System.out.println(String.format("%d) Data: %s Horário: %s", 
-            i, 
-            c.getData().format(dateFormatter), 
-            c.getHorario().format(timeFormatter)));
-            i++;
-        }
-        System.out.print("Digite o número da consulta desejada: ");
-        i = sc.nextInt();
-        i--;
-        
-        return consultas.get(i);
-    }
-    
-    public static Exame selecionarExame(){
-        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
-        ArrayList<Medico> medicos = gh.getMedicos();
-        int indiceMedico = selecionarMedico(gh.getMedicos());
-        Medico m = medicos.get(indiceMedico);
-        Agenda a = m.getAgenda();
-        List<Exame> exames = a.getTodosExamesAgendados();
-        
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        
-        int i=1;
-        for(Exame e : exames){
-            System.out.println(String.format("%d) Data: %s Horário: %s", 
-            i, 
-            e.getData().format(dateFormatter), 
-            e.getHorario().format(timeFormatter)));
-            i++;
-        }
-        System.out.print("Digite o número do exame desejado: ");
-        i = sc.nextInt();
-        i--;
-        
-        return exames.get(i);
+        return 0;
     }
     
     public static LocalDate selecionarDataMedico(Medico medico){
@@ -1312,6 +1240,7 @@ public class Principal {
             false,
             true
         );
+      
         Paciente p1 = new Paciente(
             "Carlos Silva",
             "123.456.789-00",
@@ -1325,6 +1254,7 @@ public class Principal {
             Constantes.O_MAIS,
             h1
         );
+
         // Paciente 2
         HistoricoMedico h2 = new HistoricoMedico(
             "Histórico familiar limpo",
@@ -1336,6 +1266,7 @@ public class Principal {
             true,
             false
         );
+
         Paciente p2 = new Paciente(
             "Ana Maria Oliveira",
             "987.654.321-00",
@@ -1349,6 +1280,7 @@ public class Principal {
             Constantes.A_MAIS,
             h2
         );
+
         // Paciente 3
         HistoricoMedico h3 = new HistoricoMedico(
             "Câncer de mama na família",
@@ -1360,6 +1292,7 @@ public class Principal {
             false,
             true
         );
+
         Paciente p3 = new Paciente(
             "Beatriz Santos",
             "321.654.987-00",
@@ -1373,6 +1306,7 @@ public class Principal {
             Constantes.B_MAIS,
             h3
         );
+
         // Paciente 4
         HistoricoMedico h4 = new HistoricoMedico(
             "Histórico familiar limpo",
@@ -1384,6 +1318,7 @@ public class Principal {
             false,
             true
         );
+
         Paciente p4 = new Paciente(
             "João Pedro Almeida",
             "456.789.123-00",
@@ -1397,6 +1332,7 @@ public class Principal {
             Constantes.AB_MENOS,
             h4
         );
+
         // Paciente 5
         HistoricoMedico h5 = new HistoricoMedico(
             "Histórico de doenças cardíacas na família",
@@ -1408,6 +1344,7 @@ public class Principal {
             true,
             false
         );
+
         Paciente p5 = new Paciente(
             "Miguel Costa",
             "654.321.987-00",
@@ -1421,6 +1358,7 @@ public class Principal {
             Constantes.O_MENOS,
             h5
         );
+
         gh.addPaciente(p1);
         gh.addPaciente(p2);
         gh.addPaciente(p3);
@@ -1483,6 +1421,7 @@ public class Principal {
         for(Medicamento m : medicamentos){
             gh.addMedicamento(m);
         }
+
     }
     
     public static void main(String[] args){

@@ -137,15 +137,7 @@ public class Paciente{
             consultas.add(c);
         }
         
-        public void removerConsulta(Consulta c){
-            consultas.remove(c);
-        }
-        
         public void addExame(Exame e){
             exames.add(e);
-        }
-        
-        public void removerExame(Exame e){
-            exames.remove(e);
         }
 }
