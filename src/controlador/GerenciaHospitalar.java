@@ -126,11 +126,7 @@ public class GerenciaHospitalar {
         return hospital.getEstoque();
     }
     
-    public void addMedicamento(Medicamento m){
-        hospital.adicionarMedicamento(m);
-    }
-    
-    public void removerMedicamento(String codigo){
-        hospital.removerMedicamento(codigo);
+    public boolean internarPaciente(Paciente p){
+        return this.hospital.internar(p);
     }
 }
