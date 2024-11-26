@@ -43,6 +43,7 @@ public class GerenciaHospitalar {
         this.gce = new GerenciarConsultasExames();
         this.hospital = new Hospital(nome, limiteEmergencia);
     }
+    
     /**
      * Retorna a instância única da classe GerenciaHospitalar (padrão Singleton).
      * Caso a instância ainda não tenha sido criada, ela será inicializada com valores padrão.
@@ -55,28 +56,32 @@ public class GerenciaHospitalar {
         }
         return instance;
     }
+    
     /**
      * Retorna o objeto Hospital associado à gerência hospitalar.
      *
      * @return O hospital gerenciado.
      */
-
     public Hospital getHospital(){
         return hospital;
     }
+    
     /**
      * Adiciona um paciente ao hospital e registra a ação no log.
      *
      * @param p O paciente a ser adicionado.
      */
-
     public void addPaciente(Paciente p){
         Logger logger = Logger.getInstance();
-        
-        this.cadastrados.add(p);
-        
-        logger.gravaArquivo(String.format("Paciente '%s' adicionado", p.getNome()), Logger.Level.INFO);
+        if(p != null){
+            this.cadastrados.add(p);
+            logger.gravaArquivo(String.format("Paciente '%s' adicionado", p.getNome()), Logger.Level.INFO);
+            
+            return;
+        }
+        logger.gravaArquivo(String.format("Falha em adicionar um novo paciente"), Logger.Level.ERROR);
     }
+    
     /**
      * Remove um paciente do hospital e registra a ação no log.
      *
@@ -85,10 +90,13 @@ public class GerenciaHospitalar {
     public void removerPaciente(Paciente p){
         Logger logger = Logger.getInstance();
 
-        this.cadastrados.remove(p);
-        
-        logger.gravaArquivo(String.format("Paciente '%s' removido", p.getNome()), Logger.Level.INFO);
-
+        if(p != null){
+            this.cadastrados.remove(p);   
+            logger.gravaArquivo(String.format("Paciente '%s' removido", p.getNome()), Logger.Level.INFO);
+            
+            return;
+        }
+        logger.gravaArquivo(String.format("Falha em remover um paciente"), Logger.Level.ERROR);
     }
 
     /**
@@ -96,15 +104,19 @@ public class GerenciaHospitalar {
      *
      * @param m O médico a ser adicionado.
      */
-
-    
     public void addMedico(Medico m){
         Logger logger = Logger.getInstance();
 
-        this.hospital.addMed(m);
+        if(m != null){
+            this.hospital.addMed(m);
+            logger.gravaArquivo(String.format("Médico '%s' adicionado", m.getNome()), Logger.Level.INFO);
+            
+            return;
+        }
+        logger.gravaArquivo(String.format("Falha em adicionar um novo médico"), Logger.Level.ERROR);
         
-        logger.gravaArquivo(String.format("Médico '%s' adicionado", m.getNome()), Logger.Level.INFO);
     }
+    
     /**
      * Remove um médico do hospital e registra a ação no log.
      *
@@ -113,9 +125,16 @@ public class GerenciaHospitalar {
     public void removerMedico(Medico m){
         Logger logger = Logger.getInstance();
 
-        this.hospital.removerMed(m);
-        logger.gravaArquivo(String.format("Médico '%s' removido", m.getNome()), Logger.Level.INFO);
+        if(m != null){
+            this.hospital.removerMed(m);
+            logger.gravaArquivo(String.format("Médico '%s' removido", m.getNome()), Logger.Level.INFO);
+            
+            return;
+        }
+        logger.gravaArquivo(String.format("Falha em remover um médico"), Logger.Level.ERROR);
+        
     }
+    
     /**
      * Retorna a lista de pacientes cadastrados no hospital.
      *
@@ -125,6 +144,7 @@ public class GerenciaHospitalar {
     public ArrayList<Paciente> getCadastrados() {
         return cadastrados;
     }
+    
      /**
      * Retorna a lista de médicos cadastrados no hospital.
      *
@@ -133,6 +153,7 @@ public class GerenciaHospitalar {
     public ArrayList<Medico> getMedicos(){
         return hospital.getMedicos();
     }
+    
     /**
      * Retorna a lista de departamentos do hospital.
      *
@@ -141,6 +162,7 @@ public class GerenciaHospitalar {
     public ArrayList<Departamento> getDepartamentos(){
         return hospital.getDepartamentos();
     }
+    
     /**
      * Adiciona uma consulta para o paciente e registra a ação no sistema.
      * Se o paciente não estiver cadastrado, ele será adicionado ao cadastro.
@@ -155,17 +177,22 @@ public class GerenciaHospitalar {
      * @return A consulta agendada.
      */
     public Consulta addConsulta(Paciente p, int numeroHospitalSelec, String especialidade, Medico m, LocalDate data, LocalTime horario, ReceitaMedica r){ 
+        Logger logger = Logger.getInstance();
+        
         for(Paciente cadastrado : this.cadastrados){
             if(cadastrado == p){
                 Consulta c = gce.agendarConsulta(especialidade, p, m, data, horario, r);
+                logger.gravaArquivo(String.format("Nova consulta adicionada ao paciente '%s' já cadastrado no sisitema", p.getNome()), Logger.Level.INFO);
 		return c;
             }
         }
 	// não está cadastrado
         cadastrados.add(p);
         Consulta c = gce.agendarConsulta(especialidade, p, m, data, horario, r);
+        logger.gravaArquivo(String.format("Nova consulta adicionada ao paciente '%s' que não estava cadastrado no sisitema", p.getNome()), Logger.Level.INFO);
 	return c;
     }
+    
     /**
      * Cancela uma consulta e retorna se a operação foi bem-sucedida.
      *
@@ -173,8 +200,19 @@ public class GerenciaHospitalar {
      * @return True se a consulta foi cancelada com sucesso, false caso contrário.
      */
     public boolean cancelarConsulta(Consulta c){
-        return gce.cancelarConsulta(c);
+        Logger logger = Logger.getInstance();
+        boolean cancelou = gce.cancelarConsulta(c);
+        
+        if(cancelou){
+            Paciente p = c.getPaciente();
+            logger.gravaArquivo(String.format("Consulta do paciente '%s' na data %s foi cancelada", p.getNome(), c.getData()), Logger.Level.INFO);
+        }else{
+            logger.gravaArquivo("Falha em cancelar uma consulta", Logger.Level.ERROR);
+        }
+        
+	return cancelou;
     }
+    
     /**
      * Adiciona um exame para o paciente e registra a ação no sistema.
      * Se o paciente não estiver cadastrado, ele será adicionado ao cadastro.
@@ -188,17 +226,22 @@ public class GerenciaHospitalar {
      * @return O exame agendado.
      */
     public Exame addExame(Paciente p, int numeroHospitalSelec, String especialidade, Medico m, LocalDate data, LocalTime horario){
-	for(Paciente cadastrado : this.cadastrados){
+	Logger logger = Logger.getInstance();
+        
+        for(Paciente cadastrado : this.cadastrados){
 	    if(cadastrado == p){
 		Exame e = gce.agendarExame(especialidade, p, m, data, horario);
+                logger.gravaArquivo(String.format("Novo exame adicionado ao paciente '%s' já cadastrado no sisitema", p.getNome()), Logger.Level.INFO);
 		return e;
 	    }
 	}
 	// não está cadastrado
 	cadastrados.add(p);
 	Exame e = gce.agendarExame(especialidade, p, m, data, horario);
+        logger.gravaArquivo(String.format("Novo exame adicionado ao paciente '%s' que não estava cadastrado no sistema", p.getNome()), Logger.Level.INFO);
 	return e;
     }
+    
      /**
      * Cancela um exame e retorna se a operação foi bem-sucedida.
      *
@@ -206,8 +249,19 @@ public class GerenciaHospitalar {
      * @return True se o exame foi cancelado com sucesso, false caso contrário.
      */
     public boolean cancelarExame(Exame e){
-	return gce.cancelarExame(e);
+        Logger logger = Logger.getInstance();
+        boolean cancelou = gce.cancelarExame(e);
+        
+        if(cancelou){
+            Paciente p = e.getPaciente();
+            logger.gravaArquivo(String.format("Exame do paciente '%s' na data %s foi cancelado", p.getNome(), e.getData()), Logger.Level.INFO);
+        }else{
+            logger.gravaArquivo("Falha em cancelar um exame", Logger.Level.ERROR);
+        }
+        
+	return cancelou;
     }
+    
     /**
      * Retorna a lista de medicamentos disponíveis no estoque do hospital.
      *
@@ -216,22 +270,37 @@ public class GerenciaHospitalar {
     public ArrayList<Medicamento> getEstoque(){
         return hospital.getEstoque();
     }
+    
     /**
      * Adiciona um medicamento ao estoque do hospital.
      *
      * @param m O medicamento a ser adicionado.
      */
     public void addMedicamento(Medicamento m){
-        hospital.adicionarMedicamento(m);
+        Logger logger = Logger.getInstance();
+        
+        if(m != null){
+            hospital.adicionarMedicamento(m);
+            logger.gravaArquivo(String.format("Medicamento '%s' adicionado", m.getNome()), Logger.Level.INFO);
+            
+            return;
+        }
+        logger.gravaArquivo(String.format("Falha em adicionar um novo medicamento"), Logger.Level.ERROR);    
     }
+    
     /**
      * Remove um medicamento do estoque do hospital com base no código do medicamento.
      *
      * @param codigo O código do medicamento a ser removido.
      */
     public void removerMedicamento(String codigo){
+        Logger logger = Logger.getInstance();
+        
         hospital.removerMedicamento(codigo);
+        
+        logger.gravaArquivo(String.format("Medicamento com código '%s' removido", codigo), Logger.Level.INFO);
     }
+    
     /**
      * Interna um paciente no hospital, caso haja vaga disponível na emergência.
      *
@@ -239,6 +308,14 @@ public class GerenciaHospitalar {
      * @return True se o paciente foi internado com sucesso, false caso contrário.
      */
     public boolean internarPaciente(Paciente p){
-        return this.hospital.internar(p);
+        Logger logger = Logger.getInstance();
+        boolean internou = this.hospital.internar(p);
+        
+        if(internou){
+            logger.gravaArquivo(String.format("Paciente '%s' internado", p.getNome()), Logger.Level.INFO);
+        }else{
+            logger.gravaArquivo(String.format("Falha em internar o paciente, não há vagas disponíveis"), Logger.Level.ERROR);
+        }
+        return internou;
     }
 }
