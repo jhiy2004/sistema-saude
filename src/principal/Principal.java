@@ -251,8 +251,8 @@ public class Principal {
         
         while(true){
             System.out.println("========= Relatório =========");
-            System.out.println("18 - Gerar relatório de estoque");
-            System.out.println("19 - Gerar relatório de departamentos");
+            System.out.println("1 - Gerar relatório de estoque");
+            System.out.println("2 - Gerar relatório de departamentos");
             
             System.out.println("0 - Voltar para o menu principal");
             
@@ -288,7 +288,7 @@ public class Principal {
         
         while(true){
             System.out.println("========= Internar =========");
-            System.out.println("20 - Internar paciente");
+            System.out.println("1 - Internar paciente");
             
             System.out.println("0 - Voltar para o menu internar");
             
