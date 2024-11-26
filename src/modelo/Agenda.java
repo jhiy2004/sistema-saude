@@ -9,7 +9,13 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
+/**
+ * Classe responsável por gerenciar e representar a agenda de um medico, consultas e exames.
+ * 
+ * A agenda contém os horários disponíveis, consultas agendadas, consultas canceladas, 
+ * exames agendados e exames cancelados, além de permitir operações como agendamento, 
+ * cancelamento e remarcação.
+ */
 public class Agenda {
     private Map<LocalDate, List<LocalTime>> horariosDisponiveis;
     private Map<LocalDate, List<Consulta>> consultasAgendadas;
@@ -18,6 +24,10 @@ public class Agenda {
     private Map<LocalDate, List<Exame>> examesCancelados;
     private Random random;
 
+/**
+     * Construtor da classe Agenda.
+     * Inicializa as estruturas de dados e configura os horários disponíveis para os próximos 120 dias.
+     */
     public Agenda() {
         this.horariosDisponiveis = new HashMap<>();
         this.consultasAgendadas = new HashMap<>();
@@ -28,7 +38,10 @@ public class Agenda {
         inicializarHorariosDisponiveis();
     }
 
-    // Inicializa os horários disponíveis para os próximos 120 dias a partir de hoje
+     /**
+     * Inicializa os horários disponíveis para os próximos 120 dias, 
+     * gerando horários aleatórios para cada dia.
+     */
     private void inicializarHorariosDisponiveis() {
         LocalDate hoje = LocalDate.now();
         for (int i = 0; i < 120; i++) {
@@ -54,7 +67,12 @@ public class Agenda {
         }
     }
 
-    // Agendar uma nova consulta
+    /**
+     * Agenda uma nova consulta em um horário disponível.
+     *
+     * @param Objeto do tipo Consulta contendo a data e o horário desejados.
+     * @return A consulta agendada, ou {@code null} se o horário não estiver disponível.
+     */
     public Consulta adicionarHorarioConsulta(Consulta consulta) {
         // Pega o dia e horario da consulta
         LocalDate data = consulta.getData();
@@ -78,7 +96,13 @@ public class Agenda {
         }
     }
 
-    // Cancelar uma consulta existente
+    
+    /**
+     * Cancela uma consulta agendada, liberando o horário.
+     *
+     * @param consulta A consulta a ser cancelada.
+     * @return {@code true} se o cancelamento for bem-sucedido, ou {@code false} caso contrário.
+     */
     public boolean cancelarHorarioConsulta(Consulta consulta) {
         // Pega o dia e horario da consulta
         LocalDate data = consulta.getData();
@@ -102,7 +126,14 @@ public class Agenda {
         }
     }
 
-    // Remarcar uma consulta existente para um novo horário
+    /**
+     * Reagenda uma consulta para uma nova data e horário.
+     *
+     * @param consulta A consulta a ser remarcada.
+     * @param novaData A nova data para a consulta.
+     * @param novoHorario O novo horário para a consulta.
+     * @return A consulta remarcada, ou {@code null} no caso da consulta não ser marcada.
+     */
     public Consulta remarcarHorarioConsulta(Consulta consulta, LocalDate novaData, LocalTime novoHorario) {
         if (cancelarHorarioConsulta(consulta)) {
             consulta.setData(novaData);
@@ -114,7 +145,12 @@ public class Agenda {
         }
     }
     
-    // Agendar um novo exame
+    /**
+     * Agenda um novo exame em um horário disponível.
+     *
+     * @param exame Objeto do tipo Exame contendo a data e o horário desejados.
+     * @return O exame agendado, ou {@code null} se o horário não estiver disponível.
+     */
     public Exame adicionarHorarioExame(Exame exame) {
         // Pega o dia e o horário do exame
         LocalDate data = exame.getData();
@@ -138,7 +174,12 @@ public class Agenda {
         }
     }
 
-    // Cancelar um exame existente
+    /**
+     * Cancela um exame agendado, liberando o horário.
+     *
+     * @param exame O exame a ser cancelado.
+     * @return {@code true} se o cancelamento for bem-sucedido, ou {@code false} caso contrário.
+     */
     public boolean cancelarHorarioExame(Exame exame) {
         // Pega o dia e horario do exame
         LocalDate data = exame.getData();
@@ -162,7 +203,14 @@ public class Agenda {
         }
     }
 
-    // Remarcar um exame existente para um novo horário
+    /**
+     * Reagenda um exame para uma nova data e horário.
+     *
+     * @param exame O exame a ser remarcado.
+     * @param novaData A nova data para o exame.
+     * @param novoHorario O novo horário para o exame.
+     * @return O exame remarcado, ou {@code null} se a remarcação falhar.
+     */
     public Exame remarcarHorarioConsulta(Exame exame, LocalDate novaData, LocalTime novoHorario) {
         if (cancelarHorarioExame(exame)) {
             exame.setData(novaData);
@@ -174,17 +222,31 @@ public class Agenda {
         }
     }
 
-    // Obter horários disponíveis para uma data específica
+    /**
+     * Obtém os horários disponíveis para uma data específica.
+     *
+     * @param data A data para a qual se deseja obter os horários disponíveis.
+     * @return Uma lista de horários disponíveis na data especificada.
+     */
     public List<LocalTime> getHorariosDisponiveis(LocalDate data) {
         return horariosDisponiveis.getOrDefault(data, Collections.emptyList());
     }
 
-    // Obter consultas agendadas para uma data específica
+     /**
+     * Obtém todas as consultas agendadas para uma data específica.
+     *
+     * @param data A data para a qual se deseja obter as consultas agendadas.
+     * @return Uma lista de consultas agendadas na data especificada.
+     */
     public List<Consulta> getConsultasAgendadas(LocalDate data) {
         return consultasAgendadas.getOrDefault(data, Collections.emptyList());
     }
     
-    // Obter todas as consultas agendadas
+      /**
+     * Obtém todas as consultas agendadas no sistema.
+     *
+     * @return Uma lista de todas as consultas agendadas.
+     */
     public List<Consulta> getTodasConsultasAgendadas() {
         List<Consulta> todasConsultas = new ArrayList<>();
         for (List<Consulta> consultasDoDia : consultasAgendadas.values()) {
@@ -193,12 +255,21 @@ public class Agenda {
         return todasConsultas;
     }
     
-    // Obter exames agendados para uma data específica
+    /**
+     * Obtém todas os exames agendados para uma data específica.
+     *
+     * @param data A data para a qual se deseja obter as consultas agendadas.
+     * @return Uma lista de consultas agendadas na data especificada.
+     */
     public List<Exame> getExamesAgendados(LocalDate data) {
         return examesAgendados.getOrDefault(data, Collections.emptyList());
     }
     
-    // Obter todos os exames agendados
+      /**
+     * Obtém todas os exames agendadas no sistema.
+     *
+     * @return Uma lista de todas as consultas agendadas.
+     */
     public List<Exame> getTodosExamesAgendados() {
         List<Exame> todosExames = new ArrayList<>();
         for (List<Exame> examesDoDia : examesAgendados.values()) {

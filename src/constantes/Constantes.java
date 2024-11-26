@@ -1,5 +1,9 @@
 package constantes;
-
+/**
+ * A classe Constantes contém constantes utilizadas em diversos pontos do sistema, incluindo tipos sanguíneos,
+ * especialidades médicas, status de exames e consultas, e o tamanho máximo para o armazenamento de dados de persistência.
+ * Padronizando o modo como se encontra essas constantes no sistema.
+ */
 public class Constantes {
     // Tipos sanguíneos
     public static final String A_MAIS = "A+";
