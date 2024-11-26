@@ -16,46 +16,67 @@ public class Principal {
     public static Scanner sc = new Scanner(System.in);
     
     public static void menuPrincipal(){
-        int opc = 0;
-        
-        int indiceMedico = 0;
-        int indicePaciente = 0;
-        
-        Paciente paciente;
-        
-        ArrayList<Medico> medicos = null;
-        ArrayList<Paciente> pacientes = null;
-
-        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        int opc;
         
         do{
             System.out.println("========= Principal =========");
+            System.out.println("1 - Menu adicionar");
+            System.out.println("2 - Menu remover");
+            System.out.println("3 - Menu listar");
+            System.out.println("4 - Menu relatório");
+            System.out.println("5 - Menu internar");
+            
+            System.out.println("0 - Sair");
+            
+            System.out.print("Digite a opção: ");
+            opc = sc.nextInt();            
+            
+            sc.nextLine();
+            
+            switch(opc){
+                case 1:
+                    menuAdicionar();
+                    break;
+                
+                case 2:
+                    menuRemover();
+                    break;
+                    
+                case 3:
+                    menuListar();
+                    break;
+                
+                case 4:
+                    menuRelatorio();
+                    break;
+                    
+                case 5:
+                    menuInternar();
+                    break;
+                    
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+                    
+                default:
+                    System.out.println("Opção inválida");
+                    break;
+            }
+        }while(opc != 0);
+    }
+    
+    public static void menuAdicionar(){
+        int opc;
+        
+        while(true){
+            System.out.println("========= Adicionar =========");
             System.out.println("1 - Adicionar paciente");
             System.out.println("2 - Adicionar médico");
             System.out.println("3 - Adicionar exame");
             System.out.println("4 - Adicionar consulta");
             System.out.println("5 - Adicionar medicamento");
-
-            System.out.println("6 - Remover paciente");
-            System.out.println("7 - Remover médico");
-            System.out.println("8 - Remover exame");
-            System.out.println("9 - Remover consulta");
-            System.out.println("10 - Remover medicamento");
             
-            System.out.println("11 - Listar pacientes");
-            System.out.println("12 - Listar médicos");
-            System.out.println("13 - Listar exames por médico");
-            System.out.println("14 - Listar exames por paciente");
-            System.out.println("15 - Listar consultas por médico");
-            System.out.println("16 - Listar consultas por paciente");
-            System.out.println("17 - Listar departamentos");
-
-            System.out.println("18 - Gerar relatório de estoque");
-            System.out.println("19 - Gerar relatório de departamentos");
-            
-            System.out.println("20 - Internar paciente");
-            
-            System.out.println("0 - Sair");
+            System.out.println("0 - Voltar para o menu principal");
             
             System.out.print("Digite a opção: ");
             opc = sc.nextInt();            
@@ -82,78 +103,202 @@ public class Principal {
                 case 5:
                     menuMedicamento();
                     break;
-                
-                case 6:
+                    
+                case 0:
+                    System.out.println("Voltando...");
+                    return;
+                    
+                default:
+                    System.out.println("Opção inválida");
+                    break;
+            }
+        }
+    }
+    
+    public static void menuRemover(){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        int opc, indicePaciente, indiceMedico;
+        ArrayList<Paciente> pacientes;
+        ArrayList<Medico> medicos;
+        Paciente paciente;
+        Medicamento medicamento;
+        
+        
+        
+        while(true){
+            System.out.println("========= Remover =========");
+            System.out.println("1 - Remover paciente");
+            System.out.println("2 - Remover médico");
+            System.out.println("3 - Remover exame");
+            System.out.println("4 - Remover consulta");
+            System.out.println("5 - Remover medicamento");
+            
+            System.out.println("0 - Voltar para o menu principal");
+            
+            System.out.print("Digite a opção: ");
+            opc = sc.nextInt();            
+            
+            sc.nextLine();
+            
+            switch(opc){
+                case 1:
                     pacientes = gh.getCadastrados();
                     indicePaciente = selecionarPaciente(pacientes);
                     
                     gh.removerPaciente(pacientes.get(indicePaciente));
                     break;
                     
-                case 7:
+                case 2:
                     medicos = gh.getMedicos();
                     indiceMedico = selecionarMedico(medicos);
                   
                     gh.removerMedico(medicos.get(indiceMedico));
                     break;
                          
-                case 8:
+                case 3:
                     Exame e = selecionarExame();
                     paciente = e.getPaciente();
                     paciente.removerExame(e);
                     gh.cancelarExame(e);
                     break;
                 
-                case 9:
+                case 4:
                     Consulta c = selecionarConsulta();
                     paciente = c.getPaciente();
                     paciente.removerConsulta(c);
                     gh.cancelarConsulta(c);
                     break;
                     
-                case 10:
-                    Medicamento m = selecionarMedicamento();
+                case 5:
+                    medicamento = selecionarMedicamento();
                     
-                    gh.removerMedicamento(m.getCodigo());
+                    gh.removerMedicamento(medicamento.getCodigo());
                     break;
                     
-                case 11:
+                case 0:
+                    System.out.println("Voltando...");
+                    return;
+                    
+                default:
+                    System.out.println("Opção inválida");
+                    break;
+            }
+        }
+    }
+    
+    public static void menuListar(){
+        int opc;
+        
+        while(true){
+            System.out.println("========= Listar =========");
+            System.out.println("1 - Listar pacientes");
+            System.out.println("2 - Listar médicos");
+            System.out.println("3 - Listar exames por médico");
+            System.out.println("4 - Listar exames por paciente");
+            System.out.println("5 - Listar consultas por médico");
+            System.out.println("6 - Listar consultas por paciente");
+            System.out.println("7 - Listar departamentos");
+            
+            System.out.println("0 - Voltar para o menu principal");
+            
+            System.out.print("Digite a opção: ");
+            opc = sc.nextInt();            
+            
+            sc.nextLine();
+            
+            switch(opc){
+                case 1:
                     listarPacientes();
                     break;
                     
-                case 12:
+                case 2:
                     listarMedicos();
                     break;
                 
-                case 13:
+                case 3:
                     listarExamesMedico();
                     break;
                     
-                case 14:
+                case 4:
                     listarExamesPaciente();
                     break;
                 
-                case 15:
+                case 5:
                     listarConsultasMedico();
                     break;
                 
-                case 16:
+                case 6:
                     listarConsultasPaciente();
                     break;
                     
-                case 17:
+                case 7:
                     listarDepartamentos();
                     break;
                     
-                case 18:
+                case 0:
+                    System.out.println("Voltando...");
+                    return;
+                    
+                default:
+                    System.out.println("Opção inválida");
+                    break;
+            }
+        }
+    }
+    
+    public static void menuRelatorio(){
+        int opc;
+        
+        while(true){
+            System.out.println("========= Relatório =========");
+            System.out.println("18 - Gerar relatório de estoque");
+            System.out.println("19 - Gerar relatório de departamentos");
+            
+            System.out.println("0 - Voltar para o menu principal");
+            
+            System.out.print("Digite a opção: ");
+            opc = sc.nextInt();            
+            
+            sc.nextLine();
+            
+            switch(opc){
+                case 1:
                     gerarRelatorioEstoque();
                     break;
                     
-                case 19:
+                case 2:
                     gerarRelatorioDepartamentos();
                     break;
                     
-                case 20:
+                case 0:
+                    System.out.println("Voltando...");
+                    return;
+                    
+                default:
+                    System.out.println("Opção inválida");
+                    break;
+            }
+        }
+    }
+    
+    public static void menuInternar(){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        int opc, indicePaciente;
+        ArrayList<Paciente> pacientes;
+        
+        while(true){
+            System.out.println("========= Internar =========");
+            System.out.println("20 - Internar paciente");
+            
+            System.out.println("0 - Voltar para o menu internar");
+            
+            System.out.print("Digite a opção: ");
+            opc = sc.nextInt();            
+            
+            sc.nextLine();
+            
+            switch(opc){
+                case 1:
                     pacientes = gh.getCadastrados();
                     indicePaciente = selecionarPaciente(pacientes);
                     
@@ -161,15 +306,14 @@ public class Principal {
                     break;
                     
                 case 0:
-                    System.out.println("Saindo...");
-                    break;
+                    System.out.println("Voltando...");
+                    return;
                     
                 default:
                     System.out.println("Opção inválida");
                     break;
             }
-        }while(opc != 0);
-        
+        }
     }
     
     public static void menuPaciente(){
@@ -203,7 +347,7 @@ public class Principal {
             System.out.println("9 - CPF");
             System.out.println("10 - Tipo sanguíneo");
             System.out.println("11 - Histórico médico");
-            System.out.println("0 - Voltar para menu principal");
+            System.out.println("0 - Voltar para o menu adicionar");
             System.out.print("Digite a opção: ");
             opc = sc.nextInt();
             
@@ -314,7 +458,7 @@ public class Principal {
             System.out.println("2 - Crm");
             System.out.println("3 - Especialidade médica");
             System.out.println("4 - Salário");
-            System.out.println("0 - Voltar para menu principal");
+            System.out.println("0 - Voltar para o menu adicionar");
             
             System.out.print("Digite a opção: ");
             opc = sc.nextInt();
@@ -385,7 +529,7 @@ public class Principal {
             System.out.println("3 - Criar receita");
             System.out.println("4 - Escolher data");
             System.out.println("5 - Escolher horário");
-            System.out.println("0 - Voltar para menu principal");
+            System.out.println("0 - Voltar para o menu adicionar");
             System.out.print("Digite a opção: ");
             opc = sc.nextInt();
             sc.nextLine();
@@ -455,7 +599,7 @@ public class Principal {
             System.out.println("========= Receita médica =========");
             System.out.println("1 - Adicionar prescrições");
             System.out.println("2 - Observações");
-            System.out.println("0 - Voltar para menu principal");
+            System.out.println("0 - Voltar para o menu adicionar");
             System.out.print("Digite a opção: ");
             opc = sc.nextInt();
             sc.nextLine();
@@ -505,7 +649,7 @@ public class Principal {
             System.out.println("1 - Medicamento");
             System.out.println("2 - Dosagem");
             System.out.println("3 - Instruções");
-            System.out.println("0 - Voltar para menu principal");
+            System.out.println("0 - Voltar para o menu adicionar");
             System.out.print("Digite a opção: ");
             opc = sc.nextInt();
             sc.nextLine();
@@ -556,7 +700,7 @@ public class Principal {
             System.out.println("3 - Data validade");
             System.out.println("4 - Quantidade");
             System.out.println("5 - Fabricante");
-            System.out.println("0 - Voltar para menu principal");
+            System.out.println("0 - Voltar para o menu adicionar");
             System.out.print("Digite a opção: ");
             opc = sc.nextInt();
             sc.nextLine();
@@ -623,7 +767,7 @@ public class Principal {
             System.out.println("3 - Tipo exame");
             System.out.println("4 - Escolher data");
             System.out.println("5 - Escolher horário");
-            System.out.println("0 - Voltar para menu principal");
+            System.out.println("0 - Voltar para o menu adicionar");
             System.out.print("Digite a opção: ");
             opc = sc.nextInt();
             sc.nextLine();
@@ -707,7 +851,7 @@ public class Principal {
             System.out.println("6 - Já fez uso de medicamentos?");
             System.out.println("7 - Já fez uso de cigarros ou álcool?");
             System.out.println("8 - Pratica exercícios?");
-            System.out.println("0 - Voltar para menu principal");
+            System.out.println("0 - Voltar para o menu adicionar");
     
             System.out.print("Digite a opção: ");
             opc = sc.nextInt();
