@@ -1,13 +1,29 @@
 
 import java.util.InputMismatchException;
 
+/**
+ * Classe para verificação de validade de números de CPF.
+ *
+ * O CPF (Cadastro de Pessoas Físicas) é validado com base nos seus dois dígitos verificadores,
+ * que são calculados a partir dos primeiros nove dígitos do CPF.
+ * Seguindo os passos:
+ *   1. Calcular o primeiro dígito verificador usando os 9 primeiros dígitos do CPF
+ *    2. Calcular o segundo dígito verificador usando os 9 primeiros dígitos e o primeiro verificador
+ *    3. Verificar se os 2 dígitos encontrados são iguais aos 2 últimos dígitos do CPF
+ *    4. Se os dígitos calculados forem iguais aos dígitos fornecidos, então o CPF é válido
+
+ * 
+ */
+
 public class VerificadorCPF {
 
-    // 1. Calcular o primeiro dígito verificador usando os 9 primeiros dígitos do CPF
-    // 2. Calcular o segundo dígito verificador usando os 9 primeiros dígitos e o primeiro verificador
-    // 3. Verificar se os 2 dígitos encontrados são iguais aos 2 últimos dígitos do CPF
-    // 4. Se os dígitos calculados forem iguais aos dígitos fornecidos, então o CPF é válido
-
+/**
+     * Verifica se um número de CPF é válido.
+     *
+     * @param CPF Uma string contendo os 11 dígitos numéricos do CPF.
+     * @return {@code true} se o CPF é válido; {@code false} caso contrário.
+     */
+   
     public static boolean isCPF(String CPF) {
 
         // eliminamos CPF's formados por uma sequência de números iguais
@@ -65,6 +81,14 @@ public class VerificadorCPF {
             return(false);
         }
     }
+    
+ /**
+     * Formata um número de CPF para o formato padrão: XXX.XXX.XXX-XX.
+     *
+     * @param CPF Uma string contendo os 11 dígitos numéricos do CPF.
+     * @return Uma string formatada no estilo XXX.XXX.XXX-XX.
+     */
+
 
     public static String imprimeCPF (String CPF) {
         return (CPF.substring(0,3) + "." + CPF.substring(3,6))
