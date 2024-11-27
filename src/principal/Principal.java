@@ -551,7 +551,7 @@ public class Principal {
                     break;
                 case 3:
                     if(paciente != null && medico != null && receita == null){
-                        menuReceita(paciente, medico);
+                        receita = menuReceita(paciente, medico);
                     }else{
                         System.out.println("Impossível criar a Receita");
                     }
@@ -594,7 +594,7 @@ public class Principal {
         }
     }
     
-    public static void menuReceita(Paciente p, Medico m){
+    public static ReceitaMedica menuReceita(Paciente p, Medico m){
         ArrayList<Prescricao> prescricoes = null;
         String observacao = null;
         int opc;
@@ -627,11 +627,11 @@ public class Principal {
                         System.out.println("Dados da receita:");
                         relatorioReceita(receita);
                         
-                        return;
+                        return receita;
                     }else{
                         if(selecionarSimNao("Receita não criada por falta de informações, voltar sem salvar?")){
                             System.out.println("Voltando...");
-                            return;
+                            return null;
                         }
                     }
                     break;
