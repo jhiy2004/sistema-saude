@@ -40,7 +40,7 @@ public class HistoricoMedico{
 		this.historicoMedicamentos = historicoMedicamentos;
 		this.historicoCirurgias = historicoCirurgias;
 		this.doencasPrevias = doencasPrevias;
-		this.doencasCronicas = doencasPrevias;
+		this.doencasCronicas = doencasCronicas;
                 this.usoMedicamentos = usoMedicamentos;
 		this.usoCigarroAlcool = usoCigarroAlcool;
 		this.praticaExercicios = praticaExercicios;
