@@ -593,6 +593,21 @@ public class Principal {
                         
                         return;
                     }else{
+                        if(medico == null){
+                            System.out.println("Médico não preenchido");
+                        }
+                        if(paciente == null){
+                            System.out.println("Paciente não preenchido");
+                        }
+                        if(receita == null){
+                            System.out.println("Receita não preenchida");
+                        }
+                        if(data == null){
+                            System.out.println("Data não preenchida");
+                        }
+                        if(horario == null){
+                            System.out.println("Horário não preenchido");
+                        }
                         if(selecionarSimNao("Consulta não criada por falta de informações, voltar sem salvar?")){
                             System.out.println("Voltando...");
                             return;
@@ -641,6 +656,12 @@ public class Principal {
                         
                         return receita;
                     }else{
+                        if(prescricoes == null){
+                            System.out.println("Prescrições não preenchidas");
+                        }
+                        if(observacao == null){
+                            System.out.println("Observação não preenchida");
+                        }
                         if(selecionarSimNao("Receita não criada por falta de informações, voltar sem salvar?")){
                             System.out.println("Voltando...");
                             return null;
@@ -761,6 +782,21 @@ public class Principal {
                         gh.addMedicamento(medicamento);
                         return;
                     }else{
+                        if(nome.isEmpty()){
+                            System.out.println("Nome não preenchido");
+                        }
+                        if(codigo.isEmpty()){
+                            System.out.println("Código não preenchido");
+                        }
+                        if(validade == null){
+                            System.out.println("Validade não preenchida");
+                        }
+                        if(quantidade <= 0){
+                            System.out.println("Quantidade escolhida inválida");
+                        }
+                        if(fabricante.isEmpty()){
+                            System.out.println("Fabricante não preenchido");
+                        }
                         if(selecionarSimNao("Medicamento não criado por falta de informações, voltar sem salvar?")){
                             System.out.println("Voltando...");
                         }
@@ -837,6 +873,21 @@ public class Principal {
                         
                         return;
                     }else{
+                        if(tipoExame.isEmpty()){
+                            System.out.println("Tipo exame não preenchido");
+                        }
+                        if(paciente == null){
+                            System.out.println("Paciente não selecionado");
+                        }
+                        if(medico == null){
+                            System.out.println("Médico não selecionado");
+                        }
+                        if(data == null){
+                            System.out.println("Data não preenchida");
+                        }
+                        if(horario == null){
+                            System.out.println("Horário não preenchido");
+                        }
                         if(selecionarSimNao("Exame não criado por falta de informações, voltar sem salvar?")){
                             System.out.println("Voltando...");
                             return;
@@ -1638,13 +1689,12 @@ public class Principal {
             Constantes.O_MENOS,
             h5
         );
-        /*
+        
         gh.addPaciente(p1);
         gh.addPaciente(p2);
         gh.addPaciente(p3);
         gh.addPaciente(p4);
         gh.addPaciente(p5);
-*/
         
         // Criação dos médicos, um para cada especialidade
         Medico[] medicos = {

@@ -58,6 +58,19 @@ public class Constantes {
         AGENDADO, REALIZADO, CANCELADO
     }
     
+    // Persistência
+    
     //Tamanho máximo de armazenamento do vetor persistenciaVetor
     public static final int size_persistencia = 100;
+    
+    // Taxas de descontos
+    
+    // Taxa de desconto previdência
+    public static final double TAXA_PREVIDENCIA = 0.11;
+    
+    // Taxa de outros descontos
+    public static final double TAXA_OUTROS = 0.05;
+    
+    // Desconto plano de saúde
+    public static final double DESCONTO_PLANO_SAUDE = 300.00;
 }

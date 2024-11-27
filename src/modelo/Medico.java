@@ -1,5 +1,7 @@
 package modelo;
 
+import constantes.Constantes;
+
 /**
  * Representa um médico com informações como CRM, especialidade médica, nome, salário e agenda,
  * aplicando descontos específicos no cálculo do salário líquido.
@@ -118,7 +120,7 @@ public class Medico extends FuncionarioTemplate {
      */
     @Override
     double calcDescontosPrevidencia() {
-        return salario * 0.11;
+        return salario * Constantes.TAXA_PREVIDENCIA;
     }
 
     /**
@@ -129,7 +131,7 @@ public class Medico extends FuncionarioTemplate {
      */
     @Override
     double calcDescontosPlanoSaude() {
-        return 300.00;
+        return Constantes.DESCONTO_PLANO_SAUDE;
     }
 
     /**
@@ -140,6 +142,6 @@ public class Medico extends FuncionarioTemplate {
      */
     @Override
     double calcOutrosDescontos() {
-        return salario * 0.05;
+        return salario * Constantes.TAXA_OUTROS;
     }
 }
