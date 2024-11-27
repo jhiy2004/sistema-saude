@@ -1154,8 +1154,8 @@ public class Principal {
         System.out.println(String.format("Profissão: %s", p.getProfissao()));
         System.out.println(String.format("Endereço: %s", p.getEndereco()));
         System.out.println(String.format("Telefone: %s", p.getTelefone()));
-        System.out.println(String.format("Peso: %.2f", p.getPeso()));
-        System.out.println(String.format("Altura: %.2f", p.getAltura()));
+        System.out.println(String.format("Peso: %.2f kg", p.getPeso()));
+        System.out.println(String.format("Altura: %.2f m", p.getAltura()));
         System.out.println(String.format("Tipo Sanguíneo: %s", p.getTipoSanguineo()));
         
         System.out.println("Histórico médico:");
