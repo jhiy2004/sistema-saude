@@ -405,10 +405,14 @@ public class Principal {
                     p.setAltura(altura);
                     break;
                 case 9:
-                    System.out.print("Digite o cpf do paciente: ");
+                    System.out.println("Digite o cpf do paciente (xxx.xxx.xxx-xx): ");
                     cpf = sc.nextLine();
                     
-                    p.setCPF(cpf);
+                    if(validarCpf(cpf)){
+                        p.setCPF(cpf);
+                    }else{
+                        System.out.println("O cpf digitado está inválido");
+                    }
                     break;
                 case 10:
                     tipoSanguineo = selecionarTipoSanguineo();
@@ -1200,7 +1204,7 @@ public class Principal {
         
         System.out.println("====================================");
     }
-    
+
     public static void gerarRelatorioEstoque(){
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
         RelatorioMedicamentos relatorio = new RelatorioMedicamentos();
@@ -1333,6 +1337,12 @@ public class Principal {
         }
         
         return horariosDisponiveis.get(opc - 1);
+    }
+        
+    public static boolean validarCpf(String cpf){
+        String limpo = cpf.replaceAll("[.|-]", "");
+        
+        return VerificadorCPF.isCPF(limpo);     
     }
     
     public static boolean selecionarSimNao(String pergunta){
