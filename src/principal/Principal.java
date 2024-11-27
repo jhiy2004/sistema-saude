@@ -144,35 +144,42 @@ public class Principal {
                 case 1:
                     pacientes = gh.getCadastrados();
                     indicePaciente = selecionarPaciente(pacientes);
-                    
-                    gh.removerPaciente(pacientes.get(indicePaciente));
+                    if(indicePaciente != -1){
+                        gh.removerPaciente(pacientes.get(indicePaciente));
+                    }
                     break;
                     
                 case 2:
                     medicos = gh.getMedicos();
                     indiceMedico = selecionarMedico(medicos);
-                  
-                    gh.removerMedico(medicos.get(indiceMedico));
+                    if(indiceMedico != -1){
+                        gh.removerMedico(medicos.get(indiceMedico));
+                    }
                     break;
                          
                 case 3:
                     Exame e = selecionarExame();
-                    paciente = gh.buscarPacienteCpf(e.getCpfPaciente());
-                    paciente.removerExame(e);
-                    gh.cancelarExame(e);
+                    if(e != null){
+                        paciente = gh.buscarPacienteCpf(e.getCpfPaciente());
+                        paciente.removerExame(e);
+                        gh.cancelarExame(e);
+                    }
                     break;
                 
                 case 4:
                     Consulta c = selecionarConsulta();
-                    paciente = gh.buscarPacienteCpf(c.getCpfPaciente());
-                    paciente.removerConsulta(c);
-                    gh.cancelarConsulta(c);
+                    if(c != null){
+                        paciente = gh.buscarPacienteCpf(c.getCpfPaciente());
+                        paciente.removerConsulta(c);
+                        gh.cancelarConsulta(c);
+                    }
                     break;
                     
                 case 5:
                     medicamento = selecionarMedicamento();
-                    
-                    gh.removerMedicamento(medicamento.getCodigo());
+                    if(medicamento != null){
+                        gh.removerMedicamento(medicamento.getCodigo());
+                    }
                     break;
                     
                 case 0:
@@ -301,8 +308,9 @@ public class Principal {
                 case 1:
                     pacientes = gh.getCadastrados();
                     indicePaciente = selecionarPaciente(pacientes);
-                    
-                    gh.internarPaciente(pacientes.get(indicePaciente));
+                    if(indicePaciente != -1){
+                        gh.internarPaciente(pacientes.get(indicePaciente));
+                    }
                     break;
                     
                 case 0:
@@ -542,12 +550,16 @@ public class Principal {
                 case 1:
                     ArrayList<Paciente> pacientes = gh.getCadastrados();
                     int pacienteIndex = selecionarPaciente(pacientes);
-                    paciente = pacientes.get(pacienteIndex);
+                    if(pacienteIndex != -1){
+                        paciente = pacientes.get(pacienteIndex);
+                    }
                     break;
                 case 2:
                     ArrayList<Medico> medicos = gh.getMedicos();
                     int medicoIndex = selecionarMedico(medicos);
-                    medico = medicos.get(medicoIndex);
+                    if(medicoIndex != -1){
+                        medico = medicos.get(medicoIndex);
+                    }
                     break;
                 case 3:
                     if(paciente != null && medico != null && receita == null){
@@ -671,12 +683,21 @@ public class Principal {
                     instrucoes = sc.nextLine();
                     break;
                 case 0:
-                    if(medicamento != null && !instrucoes.isEmpty()){
+                    if(medicamento != null && !instrucoes.isEmpty() && !dosagem.isEmpty()){
                         Prescricao prescricao = new Prescricao(medicamento, dosagem, instrucoes);
                         System.out.println("Dados da prescrição:");
                         relatorioPrescricao(prescricao);
                         return prescricao;
                     }else{
+                        if(medicamento == null){
+                            System.out.println("Medicamento não preenchido");
+                        }
+                        if(dosagem.isEmpty()){
+                            System.out.println("Dosagem não preenchida");
+                        }
+                        if(instrucoes.isEmpty()){
+                            System.out.println("Instruções não preenchidas");
+                        }
                         if(selecionarSimNao("Prescrição não criada por falta de informações, voltar sem salvar?")){
                             System.out.println("Voltando...");
                             return null;
@@ -776,12 +797,16 @@ public class Principal {
                 case 1:
                     ArrayList<Paciente> pacientes = gh.getCadastrados();
                     int pacienteIndex = selecionarPaciente(pacientes);
-                    paciente = pacientes.get(pacienteIndex);
+                    if(pacienteIndex != -1){
+                        paciente = pacientes.get(pacienteIndex);
+                    }
                     break;
                 case 2:
                     ArrayList<Medico> medicos = gh.getMedicos();
                     int medicoIndex = selecionarMedico(medicos);
-                    medico = medicos.get(medicoIndex);
+                    if(medicoIndex != -1){
+                        medico = medicos.get(medicoIndex);
+                    }
                     break;
                 case 3:
                     System.out.print("Digite o tipo de exame: ");
@@ -1229,6 +1254,11 @@ public class Principal {
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
         ArrayList<Medicamento> medicamentos = gh.getEstoque();
         
+        if (medicamentos == null || medicamentos.isEmpty()) {
+            System.out.println("Nenhum medicamento encontrado.");
+            return null;
+        }
+        
         int i = 1;
         for(Medicamento m : medicamentos){
             System.out.println(String.format("%d) %s", i, m.getNome()));
@@ -1246,12 +1276,21 @@ public class Principal {
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
         ArrayList<Medico> medicos = gh.getMedicos();
         int indiceMedico = selecionarMedico(gh.getMedicos());
+        if(indiceMedico == -1){
+            System.out.println("Nenhum médico encontrado");
+            return null;
+        }
         Medico m = medicos.get(indiceMedico);
         Agenda a = m.getAgenda();
         List<Consulta> consultas = a.getTodasConsultasAgendadas();
         
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        
+        if (consultas == null || consultas.isEmpty()) {
+            System.out.println("Nenhuma consulta encontrada.");
+            return null;
+        }
         
         int i=1;
         for(Consulta c : consultas){
@@ -1272,12 +1311,21 @@ public class Principal {
         GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
         ArrayList<Medico> medicos = gh.getMedicos();
         int indiceMedico = selecionarMedico(gh.getMedicos());
+        if(indiceMedico == -1){
+            System.out.println("Nenhum médico encontrado");
+            return null;
+        }
         Medico m = medicos.get(indiceMedico);
         Agenda a = m.getAgenda();
         List<Exame> exames = a.getTodosExamesAgendados();
         
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        
+        if (exames == null || exames.isEmpty()) {
+            System.out.println("Nenhum exame encontrado.");
+            return null;
+        }
         
         int i=1;
         for(Exame e : exames){
@@ -1427,6 +1475,11 @@ public class Principal {
     public static int selecionarPaciente(ArrayList<Paciente> pacientes){        
         int opc = 0;
         
+        if(pacientes == null || pacientes.isEmpty()){
+            System.out.println("Nenhum paciente encontrado");
+            return -1;
+        }
+        
         while(opc < 1 || opc > pacientes.size()){
             int cont = 1;
             for(Paciente p : pacientes){
@@ -1443,6 +1496,11 @@ public class Principal {
 
     public static int selecionarMedico(ArrayList<Medico> medicos){
         int opc = 0;
+        
+        if(medicos == null || medicos.isEmpty()){
+            System.out.println("Nenhum médico encontrado");
+            return -1;
+        }
         
         while(opc < 1 || opc > medicos.size()){
             int cont = 1;
@@ -1580,11 +1638,13 @@ public class Principal {
             Constantes.O_MENOS,
             h5
         );
+        /*
         gh.addPaciente(p1);
         gh.addPaciente(p2);
         gh.addPaciente(p3);
         gh.addPaciente(p4);
         gh.addPaciente(p5);
+*/
         
         // Criação dos médicos, um para cada especialidade
         Medico[] medicos = {
