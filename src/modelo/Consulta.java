@@ -12,11 +12,11 @@ import java.time.LocalTime;
  */
 public class Consulta {
     private String especialidade;
-    private Medico medico;
+    private String crm;
     private LocalDate data;
     private ReceitaMedica receitaMedica;
     private LocalTime horario;
-    private Paciente paciente;
+    private String cpf;
     private ReceitaMedica receita;
     private Status status;
     
@@ -24,32 +24,19 @@ public class Consulta {
      * Construtor para inicializar os atributos da consulta.
      *
      * @param especialidade A especialidade médica da consulta.
-     * @param medico O médico responsável pela consulta.
+     * @param crm O crm do médico responsável pela consulta.
      * @param data A data da consulta.
      * @param horario O horário da consulta.
-     * @param paciente O paciente que será atendido na consulta.
+     * @param cpf O cpf do paciente que será atendido na consulta.
      * @param receita A receita médica associada à consulta, se existir.
      */
-    public Consulta(String especialidade, Medico medico, LocalDate data, LocalTime horario, Paciente paciente, ReceitaMedica receita){
+    public Consulta(String especialidade, String crm, LocalDate data, LocalTime horario, String cpf, ReceitaMedica receita){
 	this.especialidade = especialidade;
-	this.medico = medico;
+	this.crm = crm;
 	this.data = data;
 	this.horario = horario;
-	this.paciente = paciente;
+	this.cpf = cpf;
         this.receita = receita;
-    }
-    
-    /**
-     * Cria uma receita médica.
-     *
-     * @param medicamento O medicamento prescrito na receita.
-     * @param observacoes Observações adicionais para a receita.
-     * @param prescricoes Lista de prescrições incluídas na receita.
-     * @return A representação textual(String) da receita médica criada.
-     */
-    public String criarReceitaMedica(String medicamento, String observacoes, ArrayList<Prescricao> prescricoes) {
-        this.receitaMedica = new ReceitaMedica(paciente, medico, observacoes, prescricoes);
-        return receitaMedica.toString();
     }
 
     /**
@@ -70,7 +57,6 @@ public class Consulta {
 	return especialidade;
     }
 
-
     /**
      * Define a especialidade da consulta.
      *
@@ -82,18 +68,18 @@ public class Consulta {
     /**
      * Obtem o medico responsavel pela consulta.
      *
-     * @return especialidade medio.
+     * @return crm do médico.
      */
-    public Medico getMedico() {
-	return medico;
+    public String getCrmMedico() {
+	return this.crm;
     }
 /**
      * Define o medico responsavel pela consulta.
      *
-     * @param médico.
+     * @param crm.
      */
-    public void setMedico(Medico medico) {
-	this.medico = medico;
+    public void setCrmMedico(String crm) {
+	this.crm = crm;
     }
     /**
      * obtem a data da consulta.
@@ -106,7 +92,7 @@ public class Consulta {
     /**
      * Define a data da consulta.
      *
-     * @param especialidade data.
+     * @param data.
      */
     public void setData(LocalDate data) {
 	this.data = data;
@@ -122,7 +108,7 @@ public class Consulta {
     /**
      * Define o horario da consulta.
      *
-     * @param especialidade horario.
+     * @param horario.
      */
     public void setHorario(LocalTime horario) {
 	this.horario = horario;
@@ -132,16 +118,16 @@ public class Consulta {
      *
      * @return paciente.
      */
-    public Paciente getPaciente() {
-	return paciente;
+    public String getCpfPaciente() {
+	return cpf;
     }
  /**
      * Define o paciente que marcou a consulta.
      *
-     * @param paciente.
+     * @param cpf.
      */
-    public void setPaciente(Paciente paciente) {
-	this.paciente = paciente;
+    public void setCpfPaciente(String cpf) {
+	this.cpf = cpf;
     }
     /**
      * obtem o status da consulta.
@@ -174,36 +160,5 @@ public class Consulta {
      */
     public void setStatus(Status status) {
         this.status = status;
-    }
-     /**
-     * Verifica se dois objetos Consulta são iguais com base em paciente, médico, data e horário.
-     *
-     * @param o O objeto a ser comparado.
-     * @return {@code true} se os objetos forem iguais; {@code false} caso contrário.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Consulta consulta = (Consulta) o;
-
-        if (!paciente.equals(consulta.paciente)) return false;
-        if (!medico.equals(consulta.medico)) return false;
-        if (!data.equals(consulta.data)) return false;
-        return horario.equals(consulta.horario);
-    }
-    /**
-     * Gera um código hash para a consulta baseado em paciente, médico, data e horário.
-     *
-     * @return O código hash gerado.
-     */
-    @Override
-    public int hashCode() {
-        int result = paciente.hashCode();
-        result = 31 * result + medico.hashCode();
-        result = 31 * result + data.hashCode();
-        result = 31 * result + horario.hashCode();
-        return result;
     }
 }

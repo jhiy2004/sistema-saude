@@ -8,28 +8,28 @@ import java.time.LocalTime;
  */
 public class Exame {
     private String tipoExame;   
-    private Medico medico;      
+    private String crm;      
     private LocalDate data;    
     private LocalTime horario; 
-    private Paciente paciente;  
+    private String cpf;  
     private String resultado;   
     private Status status; 
 /**
      * Construtor para inicializar um exame.
      *
      * @param tipoExame O tipo do exame.
-     * @param medico O médico responsável.
+     * @param crm O crm do médico responsável.
      * @param data A data do exame.
      * @param horario O horário do exame.
-     * @param paciente O paciente que realizará o exame.
+     * @param cpf O cpf do paciente que realizará o exame.
      */
     // ========== Construtor ==========
-    public Exame(String tipoExame, Medico medico, LocalDate data, LocalTime horario, Paciente paciente) {
+    public Exame(String tipoExame, String crm, LocalDate data, LocalTime horario, String cpf) {
         this.tipoExame = tipoExame;
-        this.medico = medico;
+        this.crm = crm;
         this.data = data;
         this.horario = horario;
-        this.paciente = paciente;
+        this.cpf = cpf;
         this.resultado = null; 
     }
 
@@ -54,19 +54,19 @@ public class Exame {
     /**
      * Retorna o médico responsável pelo exame.
      *
-     * @return O médico responsável.
+     * @return O crm do médico responsável.
      */
-    public Medico getMedico() {
-        return medico;
+    public String getCrmMedico() {
+        return crm;
     }
 
     /**
      * Define o médico responsável pelo exame.
      *
-     * @param medico O médico responsável.
+     * @param crm O crm do médico responsável.
      */
-    public void setMedico(Medico medico) {
-        this.medico = medico;
+    public void setCrmMedico(String crm) {
+        this.crm = crm;
     }
 
     /**
@@ -106,21 +106,21 @@ public class Exame {
     }
 
     /**
-     * Retorna o paciente que realizará o exame.
+     * Retorna o cpf do paciente que realizará o exame.
      *
-     * @return O paciente do exame.
+     * @return O cpf do paciente do exame.
      */
-    public Paciente getPaciente() {
-        return paciente;
+    public String getCpfPaciente() {
+        return cpf;
     }
 
     /**
-     * Define o paciente que realizará o exame.
+     * Define o cpf do paciente que realizará o exame.
      *
-     * @param paciente O paciente do exame.
+     * @param cpf O cpf do paciente do exame.
      */
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
+    public void setCpfPaciente(String cpf) {
+        this.cpf = cpf;
     }
 
     /**
@@ -157,37 +157,5 @@ public class Exame {
      */
     public void setStatus(Status status) {
         this.status = status;
-    }
-
-    /**
-     * Verifica se dois exames são iguais com base no paciente, médico, data e horário.
-     *
-     * @param o O objeto a ser comparado.
-     * @return {@code true} se os exames forem iguais, {@code false} caso contrário.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Exame exame = (Exame) o;
-
-        if (!paciente.equals(exame.paciente)) return false;
-        if (!medico.equals(exame.medico)) return false;
-        if (!data.equals(exame.data)) return false;
-        return horario.equals(exame.horario);
-    }
-     /**
-     * Gera um hash code para o exame com base no paciente, médico, data e horário.
-     *
-     * @return O hash code do exame.
-     */
-    @Override
-    public int hashCode() {
-        int result = paciente.hashCode();
-        result = 31 * result + medico.hashCode();
-        result = 31 * result + data.hashCode();
-        result = 31 * result + horario.hashCode();
-        return result;
     }
 }

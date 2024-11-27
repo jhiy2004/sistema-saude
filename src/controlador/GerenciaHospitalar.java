@@ -176,20 +176,20 @@ public class GerenciaHospitalar {
      * @param r A receita médica associada à consulta.
      * @return A consulta agendada.
      */
-    public Consulta addConsulta(Paciente p, int numeroHospitalSelec, String especialidade, Medico m, LocalDate data, LocalTime horario, ReceitaMedica r){ 
+    public Consulta addConsulta(String cpf, int numeroHospitalSelec, String especialidade, String crm, LocalDate data, LocalTime horario, ReceitaMedica r){ 
         Logger logger = Logger.getInstance();
         
         for(Paciente cadastrado : this.cadastrados){
-            if(cadastrado == p){
-                Consulta c = gce.agendarConsulta(especialidade, p, m, data, horario, r);
-                logger.gravaArquivo(String.format("Nova consulta adicionada ao paciente '%s' já cadastrado no sisitema", p.getNome()), Logger.Level.INFO);
+            if(cadastrado.getCPF().equals(cpf)){
+                Consulta c = gce.agendarConsulta(especialidade, cpf, crm, data, horario, r);
+                logger.gravaArquivo(String.format("Nova consulta adicionada ao paciente '%s' já cadastrado no sisitema", buscarPacienteCpf(cpf).getNome()), Logger.Level.INFO);
 		return c;
             }
         }
 	// não está cadastrado
-        cadastrados.add(p);
-        Consulta c = gce.agendarConsulta(especialidade, p, m, data, horario, r);
-        logger.gravaArquivo(String.format("Nova consulta adicionada ao paciente '%s' que não estava cadastrado no sisitema", p.getNome()), Logger.Level.INFO);
+        cadastrados.add(buscarPacienteCpf(cpf));
+        Consulta c = gce.agendarConsulta(especialidade, cpf, crm, data, horario, r);
+        logger.gravaArquivo(String.format("Nova consulta adicionada ao paciente '%s' que não estava cadastrado no sisitema", buscarPacienteCpf(cpf).getNome()), Logger.Level.INFO);
 	return c;
     }
     
@@ -204,7 +204,7 @@ public class GerenciaHospitalar {
         boolean cancelou = gce.cancelarConsulta(c);
         
         if(cancelou){
-            Paciente p = c.getPaciente();
+            Paciente p = buscarPacienteCpf(c.getCpfPaciente());
             logger.gravaArquivo(String.format("Consulta do paciente '%s' na data %s foi cancelada", p.getNome(), c.getData()), Logger.Level.INFO);
         }else{
             logger.gravaArquivo("Falha em cancelar uma consulta", Logger.Level.ERROR);
@@ -225,20 +225,20 @@ public class GerenciaHospitalar {
      * @param horario O horário do exame.
      * @return O exame agendado.
      */
-    public Exame addExame(Paciente p, int numeroHospitalSelec, String especialidade, Medico m, LocalDate data, LocalTime horario){
+    public Exame addExame(String cpf, int numeroHospitalSelec, String especialidade, String crm, LocalDate data, LocalTime horario){
 	Logger logger = Logger.getInstance();
         
         for(Paciente cadastrado : this.cadastrados){
-	    if(cadastrado == p){
-		Exame e = gce.agendarExame(especialidade, p, m, data, horario);
-                logger.gravaArquivo(String.format("Novo exame adicionado ao paciente '%s' já cadastrado no sisitema", p.getNome()), Logger.Level.INFO);
+	    if(cadastrado.getCPF().equals(cpf)){
+		Exame e = gce.agendarExame(especialidade, cpf, crm, data, horario);
+                logger.gravaArquivo(String.format("Novo exame adicionado ao paciente '%s' já cadastrado no sisitema", buscarPacienteCpf(cpf).getNome()), Logger.Level.INFO);
 		return e;
 	    }
 	}
 	// não está cadastrado
-	cadastrados.add(p);
-	Exame e = gce.agendarExame(especialidade, p, m, data, horario);
-        logger.gravaArquivo(String.format("Novo exame adicionado ao paciente '%s' que não estava cadastrado no sistema", p.getNome()), Logger.Level.INFO);
+	cadastrados.add(buscarPacienteCpf(cpf));
+	Exame e = gce.agendarExame(especialidade, cpf, crm, data, horario);
+        logger.gravaArquivo(String.format("Novo exame adicionado ao paciente '%s' que não estava cadastrado no sistema", buscarPacienteCpf(cpf).getNome()), Logger.Level.INFO);
 	return e;
     }
     
@@ -253,7 +253,7 @@ public class GerenciaHospitalar {
         boolean cancelou = gce.cancelarExame(e);
         
         if(cancelou){
-            Paciente p = e.getPaciente();
+            Paciente p = buscarPacienteCpf(e.getCpfPaciente());
             logger.gravaArquivo(String.format("Exame do paciente '%s' na data %s foi cancelado", p.getNome(), e.getData()), Logger.Level.INFO);
         }else{
             logger.gravaArquivo("Falha em cancelar um exame", Logger.Level.ERROR);
@@ -317,5 +317,33 @@ public class GerenciaHospitalar {
             logger.gravaArquivo(String.format("Falha em internar o paciente, não há vagas disponíveis"), Logger.Level.ERROR);
         }
         return internou;
+    }
+    
+    public static Medico buscarMedicoCrm(String crm){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        
+        ArrayList<Medico> medicos = gh.getMedicos();
+        
+        for(Medico m : medicos){
+            if(m.getCrm().equals(crm)){
+                return m;
+            }
+        }
+        
+        return null;
+    }
+    
+    public static Paciente buscarPacienteCpf(String cpf){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        
+        ArrayList<Paciente> pacientes = gh.getCadastrados();
+        
+        for(Paciente p : pacientes){
+            if(p.getCPF().equals(cpf)){
+                return p;
+            }
+        }
+        
+        return null;
     }
 }

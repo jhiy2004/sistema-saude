@@ -157,14 +157,14 @@ public class Principal {
                          
                 case 3:
                     Exame e = selecionarExame();
-                    paciente = e.getPaciente();
+                    paciente = gh.buscarPacienteCpf(e.getCpfPaciente());
                     paciente.removerExame(e);
                     gh.cancelarExame(e);
                     break;
                 
                 case 4:
                     Consulta c = selecionarConsulta();
-                    paciente = c.getPaciente();
+                    paciente = gh.buscarPacienteCpf(c.getCpfPaciente());
                     paciente.removerConsulta(c);
                     gh.cancelarConsulta(c);
                     break;
@@ -572,7 +572,7 @@ public class Principal {
                     break;
                 case 0:
                     if(medico != null && paciente != null && receita != null && data != null && horario != null){
-                        Consulta consulta = new Consulta(medico.getEspecialidadeMedica(), medico, data, horario, paciente, receita);
+                        Consulta consulta = new Consulta(medico.getEspecialidadeMedica(), medico.getCrm(), data, horario, paciente.getCPF(), receita);
                         medico.adicionarConsulta(consulta);
                         paciente.addConsulta(consulta);
                         
@@ -700,10 +700,9 @@ public class Principal {
         while(true){
             System.out.println("========= Medicamento =========");
             System.out.println("1 - Nome");
-            System.out.println("2 - Codigo");
-            System.out.println("3 - Data validade");
-            System.out.println("4 - Quantidade");
-            System.out.println("5 - Fabricante");
+            System.out.println("2 - Data validade");
+            System.out.println("3 - Quantidade");
+            System.out.println("4 - Fabricante");
             System.out.println("0 - Voltar para o menu adicionar");
             System.out.print("Digite a opção: ");
             opc = sc.nextInt();
@@ -715,10 +714,6 @@ public class Principal {
                     nome = sc.nextLine();
                     break;
                 case 2:
-                    System.out.print("Digite o código: ");
-                    codigo = sc.nextLine();
-                    break;
-                case 3:
                     System.out.print("Digite a data de validade (dd/MM/yyyy): ");
                     String dataValidade = sc.nextLine();
                     try {
@@ -726,16 +721,17 @@ public class Principal {
                     } catch (DateTimeParseException e) {
                         System.out.println("Data inválida. Por favor, use o formato dd/MM/yyyy.");
                     }
-                case 4:
+                case 3:
                     System.out.print("Digite a quantidade: ");
                     quantidade = sc.nextInt();
                     break;
-                case 5:
+                case 4:
                     System.out.print("Digite o fabricante: ");
                     fabricante = sc.nextLine();
                     break;
                 case 0:
                     if(!nome.isEmpty() && !codigo.isEmpty() && validade != null && quantidade > 0 && !fabricante.isEmpty()){
+                        codigo = UUID.randomUUID().toString();
                         Medicamento medicamento = new Medicamento(nome, codigo, validade, quantidade, fabricante);
                         
                         System.out.println("Dados do medicamento:");
@@ -807,7 +803,7 @@ public class Principal {
                     break;
                 case 0:
                     if(!tipoExame.isEmpty() && paciente != null && medico != null && data != null && horario != null){
-                        Exame exame = new Exame(tipoExame, medico, data, horario, paciente);
+                        Exame exame = new Exame(tipoExame, medico.getCrm(), data, horario, paciente.getCPF());
                         medico.adicionarExame(exame);
                         paciente.addExame(exame);
                         
@@ -1051,10 +1047,15 @@ public class Principal {
     }
     
     public static void relatorioExame(Exame exame){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        
+        Medico medico = gh.buscarMedicoCrm(exame.getCrmMedico());
+        Paciente paciente = gh.buscarPacienteCpf(exame.getCpfPaciente());
+        
         System.out.println("Médico responsável:");
-        relatorioMedico(exame.getMedico());
+        relatorioMedico(medico);
         System.out.println("Paciente do exame:");
-        relatorioPaciente(exame.getPaciente());
+        relatorioPaciente(paciente);
         System.out.println("Tipo de exame:");
         System.out.println(exame.getTipoExame());
         System.out.println("Data do exame:");
@@ -1064,10 +1065,15 @@ public class Principal {
     }
     
     public static void relatorioConsulta(Consulta consulta){
+        GerenciaHospitalar gh = GerenciaHospitalar.getInstance();
+        
+        Medico medico = gh.buscarMedicoCrm(consulta.getCrmMedico());
+        Paciente paciente = gh.buscarPacienteCpf(consulta.getCpfPaciente());
+        
         System.out.println("Médico responsável:");
-        relatorioMedico(consulta.getMedico());
+        relatorioMedico(medico);
         System.out.println("Paciente da consulta:");
-        relatorioPaciente(consulta.getPaciente());
+        relatorioPaciente(paciente);
         System.out.println("Receita medica:");
         relatorioReceita(consulta.getReceita());
         System.out.println("Data da consulta:");
