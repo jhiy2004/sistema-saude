@@ -68,9 +68,9 @@ public class GerenciarConsultasExames {
      * @param r A receita médica associada à consulta, se houver.
      * @return A consulta agendada.
      */
-    public Consulta agendarConsulta(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario, ReceitaMedica r){
-	Consulta c = new Consulta(especialidade, m, data, horario, p, r);
-        Consulta retorno = m.adicionarConsulta(c);
+    public Consulta agendarConsulta(String especialidade, String cpf, String crm, LocalDate data, LocalTime horario, ReceitaMedica r){
+	Consulta c = new Consulta(especialidade, crm, data, horario, cpf, r);
+        Consulta retorno = GerenciaHospitalar.buscarMedicoCrm(crm).adicionarConsulta(c);
 	consultas.add(c);
         return retorno;
     }
@@ -81,7 +81,7 @@ public class GerenciarConsultasExames {
      * @return Retorna true se a consulta foi cancelada com sucesso, false caso contrário.
      */
     public boolean cancelarConsulta(Consulta c){
-	Medico m = c.getMedico();
+	Medico m = GerenciaHospitalar.buscarMedicoCrm(c.getCrmMedico());
 	boolean retorno = m.cancelarConsulta(c);
         if(retorno){
             // Se removeu na agenda, remove aqui
@@ -99,9 +99,9 @@ public class GerenciarConsultasExames {
      * @param horario O horário do exame.
      * @return O exame agendado.
      */
-    public Exame agendarExame(String especialidade, Paciente p, Medico m, LocalDate data, LocalTime horario){
-        Exame e = new Exame(especialidade, m, data, horario, p);
-        Exame retorno = m.adicionarExame(e);
+    public Exame agendarExame(String especialidade, String cpf, String crm, LocalDate data, LocalTime horario){
+        Exame e = new Exame(especialidade, crm, data, horario, cpf);
+        Exame retorno = GerenciaHospitalar.buscarMedicoCrm(crm).adicionarExame(e);
         exames.add(e);
         return retorno;
     }
@@ -112,7 +112,7 @@ public class GerenciarConsultasExames {
      * @return Retorna true se o exame foi cancelado com sucesso, false caso contrário.
      */
     public boolean cancelarExame(Exame e){
-        Medico m = e.getMedico();
+        Medico m = GerenciaHospitalar.buscarMedicoCrm(e.getCrmMedico());
         boolean retorno = m.cancelarExame(e);
         if(retorno){
             // Se removeu na agenda, remove aqui
